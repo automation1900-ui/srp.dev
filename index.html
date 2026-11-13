@@ -84,7 +84,35 @@ html[data-theme="light"] .glass-nav{box-shadow:0 14px 40px rgba(60,70,120,.14),i
 .logo-img{width:36px;height:36px;border-radius:11px;overflow:hidden;background:var(--glass-2);border:1px solid var(--line-2);display:grid;place-items:center;box-shadow:0 6px 18px var(--glow);flex:none}
 .logo-img img{width:100%;height:100%;object-fit:cover}
 .logo-img b{font-size:15px;font-weight:800;background:var(--g1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.logo span{font-size:19px;font-weight:800;letter-spacing:-.5px;background:var(--g1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ===== SRP.dev premium wordmark ===== */
+.logo-text{display:inline-flex;align-items:center;gap:0;font-size:19px;font-weight:800;letter-spacing:-.5px;line-height:1;white-space:nowrap}
+.brand-srp{font-size:19px;font-weight:800;letter-spacing:-.7px;background:var(--g1);background-size:220% 220%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 9s ease-in-out infinite}
+.brand-dot{font-size:19px;font-weight:800;color:var(--cyan);margin:0 3px 0 1px;text-shadow:0 0 12px rgba(95,242,224,.5);animation:dotGlow 2.8s ease-in-out infinite}
+@keyframes dotGlow{0%,100%{opacity:1;text-shadow:0 0 10px rgba(95,242,224,.42)}50%{opacity:.5;text-shadow:0 0 20px rgba(95,242,224,.9)}}
+.brand-dev{position:relative;display:inline-flex;align-items:center;gap:4px;
+  font-family:'SF Mono',ui-monospace,'Cascadia Code',Consolas,monospace;
+  font-size:12.5px;font-weight:700;letter-spacing:.7px;line-height:1;
+  padding:4px 8px 5px;border-radius:8px;color:var(--cyan);white-space:nowrap;
+  background:linear-gradient(145deg,rgba(95,242,224,.16),rgba(139,123,255,.10));
+  border:1px solid rgba(95,242,224,.30);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px rgba(95,242,224,.10);
+  isolation:isolate;overflow:hidden;
+  transition:color .35s,background .35s,border-color .35s,box-shadow .35s,transform .35s var(--ease)}
+.brand-dev::after{content:'';position:absolute;inset:-1px;border-radius:9px;z-index:-1;pointer-events:none;opacity:0;
+  background:linear-gradient(120deg,transparent 34%,rgba(255,255,255,.42) 50%,transparent 66%);background-size:260% 100%;transition:opacity .3s}
+.dev-txt{display:inline-block;min-width:20px}
+.logo:hover .brand-dev{color:#fff;background:linear-gradient(145deg,rgba(95,242,224,.34),rgba(139,123,255,.30));border-color:rgba(95,242,224,.62);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 10px 26px rgba(95,242,224,.30);transform:translateY(-1px)}
+.logo:hover .brand-dev::after{opacity:1;animation:sheen 1.05s var(--ease)}
+@keyframes sheen{from{background-position:200% 0}to{background-position:-120% 0}}
+.brand-caret{display:inline-block;width:2px;height:11px;border-radius:1px;background:var(--cyan);
+  box-shadow:0 0 8px rgba(95,242,224,.85);animation:caretBlink 1.05s steps(1) infinite;flex:none}
+@keyframes caretBlink{0%,48%{opacity:1}49%,100%{opacity:0}}
+html[data-theme="light"] .brand-dev{color:#0b8b7d;background:linear-gradient(145deg,rgba(15,156,140,.15),rgba(110,168,255,.12));border-color:rgba(15,156,140,.32);box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 6px 16px rgba(15,156,140,.12)}
+html[data-theme="light"] .logo:hover .brand-dev{color:#fff;background:linear-gradient(145deg,#10a795,#6ea8ff);border-color:transparent;box-shadow:0 10px 24px rgba(15,156,140,.28)}
+html[data-theme="light"] .brand-caret{background:#0b8b7d;box-shadow:0 0 8px rgba(15,156,140,.6)}
+html[data-theme="light"] .brand-dot{color:#0b8b7d;text-shadow:0 0 10px rgba(15,156,140,.35)}
 
 .nav-links{display:flex;align-items:center;gap:2px;position:relative;padding:4px}
 .nav-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:99px;background:var(--glass-2);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.12);opacity:0;transition:transform .45s var(--ease),width .45s var(--ease),opacity .3s;pointer-events:none}
@@ -335,7 +363,12 @@ html.lock,html.lock body{overflow:hidden}
 /* --- premium preloader --- */
 .preloader{position:fixed;inset:0;z-index:4000;display:grid;place-items:center;background:var(--bg);transition:opacity .55s var(--ease),visibility .55s}
 .preloader.done{opacity:0;visibility:hidden;pointer-events:none}
-.pl-logo{font-size:46px;font-weight:800;letter-spacing:-1.5px;background:var(--g1);background-size:220% 220%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 2.2s linear infinite,plPulse 1.15s var(--ease) infinite}
+.pl-logo{display:flex;align-items:baseline;justify-content:center;gap:2px;font-size:46px;font-weight:800;letter-spacing:-1.5px}
+.pl-srp{background:var(--g1);background-size:220% 220%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 2.2s linear infinite,plPulse 1.15s var(--ease) infinite}
+.pl-dot{background:var(--g1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 2.2s linear infinite,plPulse 1.15s var(--ease) infinite}
+.pl-dev{font-family:'SF Mono',ui-monospace,Consolas,monospace;font-size:22px;font-weight:700;letter-spacing:1.5px;color:var(--cyan);
+  margin-left:7px;text-shadow:0 0 18px rgba(95,242,224,.55);animation:plFade 1.05s ease-in-out infinite}
+@keyframes plFade{0%,100%{opacity:1}50%{opacity:.35}}
 .pl-bar{width:190px;height:3px;border-radius:99px;background:var(--glass-2);margin-top:20px;overflow:hidden}
 .pl-bar i{display:block;height:100%;width:38%;border-radius:99px;background:var(--g1);animation:plSlide 1.05s var(--ease) infinite}
 @keyframes plPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
@@ -344,10 +377,8 @@ html.lock,html.lock body{overflow:hidden}
 /* --- living gradient text --- */
 @keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 
-/* --- SRP.dev brand: dot pulse + code-scramble accent --- */
-.dev{animation:dotPulse 2.4s ease-in-out infinite;transform-origin:left center;display:inline-block}
-@keyframes dotPulse{0%,100%{opacity:1;filter:drop-shadow(0 0 0 rgba(139,123,255,0))}50%{opacity:.55;filter:drop-shadow(0 0 9px var(--glow))}}
-.logo-text{letter-spacing:-.5px}
+/* --- SRP.dev: subtle breathing on the whole mark --- */
+.logo:hover .brand-srp{animation:gradShift 2.4s ease-in-out infinite}
 
 /* --- floating card icons (svg floats, hover tilt stays free) --- */
 @keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
@@ -448,7 +479,7 @@ html[data-theme="light"] .click-ring{border-color:rgba(45,120,235,.85);box-shado
 <body>
 <div class="preloader" id="preloader" aria-hidden="true">
   <div style="text-align:center">
-        <div class="pl-logo">SRP<span class="dev">.</span><span class="dev" data-scramble>dev</span></div>
+        <div class="pl-logo"><span class="pl-srp">SRP</span><span class="pl-dot">.</span><span class="pl-dev">dev</span></div>
     <div class="pl-bar"><i></i></div>
   </div>
 </div>
@@ -457,9 +488,9 @@ html[data-theme="light"] .click-ring{border-color:rgba(45,120,235,.85);box-shado
 <!-- ============================= NAV ============================= -->
 <div class="nav-wrap">
   <nav class="glass-nav" id="navbar">
-    <a class="logo" href="#home" aria-label="SRP home">
-      <span class="logo-img"><img src="Srplogo.png" alt="SRP logo" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S'}))"></span>
-      <span class="logo-text">SRP<span class="dev">.</span><span class="dev" data-scramble>dev</span></span>
+    <a class="logo" href="#home" aria-label="SRP.dev — home">
+      <span class="logo-img"><img src="Srplogo.png" alt="SRP.dev logo" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S'}))"></span>
+      <span class="logo-text"><span class="brand-srp">SRP</span><span class="brand-dot">.</span><span class="brand-dev"><span class="dev-txt" data-scramble>dev</span><i class="brand-caret" aria-hidden="true"></i></span></span>
     </a>
     <div class="nav-links" id="navLinks">
       <span class="nav-pill" id="navPill"></span>
@@ -810,9 +841,9 @@ html[data-theme="light"] .click-ring{border-color:rgba(45,120,235,.85);box-shado
 <footer>
   <div class="f-grid">
     <div class="f-brand">
-      <a class="logo" href="#home">
+      <a class="logo" href="#home" aria-label="SRP.dev — home">
         <span class="logo-img"><img src="Srplogo.png" alt="" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S'}))"></span>
-        <span class="logo-text">SRP<span class="dev">.</span><span class="dev" data-scramble>dev</span></span>
+        <span class="logo-text"><span class="brand-srp">SRP</span><span class="brand-dot">.</span><span class="brand-dev"><span class="dev-txt" data-scramble>dev</span><i class="brand-caret" aria-hidden="true"></i></span></span>
       </a>
       <p>Premium digital experiences crafted with precision and patience — from the first architecture decision to the last animation curve.</p>
     </div>
@@ -841,7 +872,7 @@ html[data-theme="light"] .click-ring{border-color:rgba(45,120,235,.85);box-shado
     </div>
   </div>
   <div class="copy">
-    <span>&copy; 2026 <span class="logo-text">SRP<span class="dev">.</span><span class="dev" data-scramble>dev</span></span> — All rights reserved.</span>
+    <span>&copy; 2026 <b>SRP.dev</b> — All rights reserved.</span>
     <span>Crafted with <b>premium precision</b></span>
   </div>
 </footer>
@@ -1230,34 +1261,38 @@ html[data-theme="light"] .click-ring{border-color:rgba(45,120,235,.85);box-shado
 
   /* ---------- SRP.dev code-scramble: decoding effect on .dev text ---------- */
   (function(){
-    var els=document.querySelectorAll('.dev[data-scramble]');
-    if(!els.length||reduce)return;
+    var els=document.querySelectorAll('.dev-txt[data-scramble]');
+    if(!els.length)return;
     var GLYPHS='!<>-_\\/[]{}=+*^?#________';
     var timers=new WeakMap();
     function scramble(el){
+      if(reduce||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
       var final=el.textContent.trim();
-      if(!final)return;
-      var len=final.length,frame=0,total=12+len*2;
+      if(!final||final==='dev')final='dev';
+      var len=final.length,frame=0,total=10+len*2;
       clearInterval(timers.get(el));
       var iv=setInterval(function(){
         frame++;
-        var out='';
+        var out='',lock=frame/total*1.4;
         for(var i=0;i<len;i++){
-          var lock=frame/ total*1.35;
-          if(i/len<lock){out+=final[i];}
-          else{out+=GLYPHS.charAt(Math.floor(Math.random()*GLYPHS.length));}
+          out+= (i/len<lock) ? final[i] : GLYPHS.charAt(Math.floor(Math.random()*GLYPHS.length));
         }
         el.textContent=out;
         if(frame>=total){el.textContent=final;clearInterval(iv);}
-      },42);
+      },40);
       timers.set(el,iv);
     }
-    els.forEach(function(el){scramble(el)});
+    /* decode once on load */
+    els.forEach(function(el,i){setTimeout(function(){scramble(el)},260+i*140)});
+    /* periodic re-decode, like a live terminal */
     setInterval(function(){
       var el=els[Math.floor(Math.random()*els.length)];
-      if(el&&!el.isConnected)return;
-      scramble(el);
-    },4600);
+      if(el&&el.isConnected)scramble(el);
+    },5200);
+    /* hover = instant re-decode */
+    document.querySelectorAll('.logo').forEach(function(a){
+      a.addEventListener('mouseenter',function(){els.forEach(scramble)});
+    });
   })();
 })();
 </script>
