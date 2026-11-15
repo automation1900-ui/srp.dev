@@ -22,12 +22,15 @@
 
   <style>
     /* ==========================================================================
-       THEME VARIABLES & RESET
+       THEME VARIABLES, RESET & ZERO-BLUE-OUTLINE ELIMINATION
        ========================================================================== */
     *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      /* KILL UGLY BROWSER BLUE TAP HIGHLIGHT COMPLETELY */
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-touch-callout: none;
     }
 
     :root {
@@ -36,6 +39,7 @@
       --accent-light: #78B8E8;
       --accent-purple: #a855f7;
       --grad-electric: linear-gradient(90deg, #4EA3E0 0%, #a855f7 100%);
+      --grad-glow: radial-gradient(circle, rgba(78, 163, 224, 0.18) 0%, transparent 70%);
       --font-heading: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
@@ -66,6 +70,22 @@
       height: 100vh;
     }
 
+    /* ELIMINATE DEFAULT BROWSER BLUE FOCUS OUTLINES */
+    :focus {
+      outline: none !important;
+    }
+
+    :focus-visible {
+      outline: 2px solid rgba(78, 163, 224, 0.5) !important;
+      outline-offset: 3px;
+      border-radius: inherit;
+    }
+
+    button, a, input, select {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
     ::selection {
       background-color: var(--accent-electric);
       color: #ffffff;
@@ -93,6 +113,20 @@
       position: relative;
     }
 
+    /* Top Live Scroll Progress Bar */
+    .scroll-progress-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 2.5px;
+      background: var(--grad-electric);
+      box-shadow: 0 0 12px var(--accent-electric);
+      z-index: 10000;
+      pointer-events: none;
+      transition: width 0.08s linear;
+    }
+
     /* Ambient noise & grid */
     .bg-grid-mesh {
       position: fixed;
@@ -107,7 +141,33 @@
     }
 
     /* ==========================================================================
-       LUXURY PRELOADER (0 - 100% SMOOTH ANIMATION)
+       PREMIUM LIQUID ELECTRIC CLICK RIPPLE & TACTILE PRESS FEEDBACK
+       ========================================================================== */
+    .click-ripple {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0);
+      background: radial-gradient(circle, rgba(78, 163, 224, 0.45) 0%, rgba(168, 85, 247, 0.25) 45%, transparent 70%);
+      animation: rippleExpand 0.65s var(--ease) forwards;
+      z-index: 100;
+    }
+
+    @keyframes rippleExpand {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+    }
+
+    .tactile-press {
+      transition: transform 0.15s var(--ease), box-shadow 0.2s;
+    }
+
+    .tactile-press:active {
+      transform: scale(0.965) !important;
+    }
+
+    /* ==========================================================================
+       LUXURY 0 - 100% PRELOADER (ApproX Style High-Tech Terminal)
        ========================================================================== */
     .luxury-preloader {
       position: fixed;
@@ -118,28 +178,29 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.75s var(--ease), visibility 0.75s var(--ease);
+      transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.85s var(--ease);
+      overflow: hidden;
     }
 
     .luxury-preloader.done {
+      transform: translateY(-100%);
       opacity: 0;
-      visibility: hidden;
       pointer-events: none;
     }
 
     .preloader-glow-orb {
       position: absolute;
-      width: 480px;
-      height: 480px;
-      background: radial-gradient(circle, rgba(78, 163, 224, 0.18) 0%, transparent 70%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(78, 163, 224, 0.18) 0%, rgba(168, 85, 247, 0.08) 50%, transparent 70%);
       filter: blur(90px);
       border-radius: 50%;
-      animation: pulsePreloader 2.4s ease-in-out infinite;
+      animation: pulsePreloader 2.5s ease-in-out infinite;
       pointer-events: none;
     }
 
     @keyframes pulsePreloader {
-      0%, 100% { transform: scale(0.9); opacity: 0.6; }
+      0%, 100% { transform: scale(0.9); opacity: 0.55; }
       50% { transform: scale(1.18); opacity: 1; }
     }
 
@@ -150,15 +211,30 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 20px;
+      padding: 24px;
+    }
+
+    .preloader-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
     }
 
     .preloader-logo-ring {
-      width: 76px;
-      height: 76px;
+      width: 78px;
+      height: 78px;
       border-radius: 22px;
       padding: 3px;
-      background: linear-gradient(135deg, rgba(78, 163, 224, 0.7), rgba(168, 85, 247, 0.4));
+      background: linear-gradient(135deg, rgba(78, 163, 224, 0.7), rgba(168, 85, 247, 0.45));
       margin-bottom: 24px;
       box-shadow: 0 0 35px rgba(78, 163, 224, 0.45);
       animation: logoFloat 3s ease-in-out infinite;
@@ -190,23 +266,24 @@
       align-items: baseline;
       font-family: var(--font-heading);
       font-weight: 700;
-      font-size: clamp(48px, 9vw, 84px);
+      font-size: clamp(52px, 10vw, 88px);
       letter-spacing: -0.05em;
       color: #ffffff;
       line-height: 1;
       margin-bottom: 16px;
-      text-shadow: 0 0 40px rgba(78, 163, 224, 0.5);
+      text-shadow: 0 0 45px rgba(78, 163, 224, 0.5);
     }
 
     .preloader-symbol {
-      font-size: clamp(20px, 3.5vw, 32px);
+      font-size: clamp(22px, 4vw, 36px);
       color: var(--accent-electric);
       margin-left: 4px;
     }
 
     .preloader-bar-bg {
-      width: 260px;
-      height: 3.5px;
+      width: 280px;
+      max-width: 80vw;
+      height: 3px;
       border-radius: 9999px;
       background: rgba(255, 255, 255, 0.1);
       overflow: hidden;
@@ -221,7 +298,7 @@
       height: 100%;
       width: 0%;
       background: var(--grad-electric);
-      box-shadow: 0 0 12px var(--accent-electric);
+      box-shadow: 0 0 14px var(--accent-electric);
       transition: width 0.08s linear;
     }
 
@@ -231,6 +308,7 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.45);
+      height: 16px;
     }
 
     /* ==========================================================================
@@ -238,7 +316,7 @@
        ========================================================================== */
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(32px);
       transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
       will-change: opacity, transform;
     }
@@ -438,10 +516,6 @@
     .btn-pill-get-started:hover {
       box-shadow: 0 0 28px rgba(78, 163, 224, 0.55);
       transform: scale(1.02);
-    }
-
-    .btn-pill-get-started:active {
-      transform: scale(0.96);
     }
 
     .btn-pill-inner {
@@ -672,10 +746,6 @@
       transform: scale(1.02);
     }
 
-    .btn-discuss-project:active {
-      transform: scale(0.96);
-    }
-
     .btn-sheen {
       position: absolute;
       top: 0;
@@ -825,7 +895,7 @@
     }
 
     /* ==========================================================================
-       SECTION 3: METRICS & TRUST (ApproX 4-Column Bento Grid)
+       SECTION 3: METRICS & TRUST (ApproX 4-Column Bento Grid with Border Beam)
        ========================================================================== */
     .metrics-section {
       position: relative;
@@ -918,9 +988,10 @@
     }
 
     .metric-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(78, 163, 224, 0.35);
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(78, 163, 224, 0.4);
       transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
     }
 
     .metric-card-top {
@@ -994,7 +1065,7 @@
     }
 
     /* ==========================================================================
-       SECTION 4: WHAT WE BUILD (Services)
+       SECTION 4: WHAT WE BUILD (Services with 3D Tilt & Spotlight)
        ========================================================================== */
     .services-section {
       padding: 120px 0;
@@ -1029,6 +1100,7 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 24px;
+      perspective: 1000px;
     }
 
     @media (min-width: 768px) {
@@ -1046,15 +1118,17 @@
       padding: 38px 32px;
       display: flex;
       flex-direction: column;
-      transition: all 0.35s var(--ease);
+      transition: transform 0.35s var(--ease), border-color 0.35s, background-color 0.35s, box-shadow 0.35s;
       overflow: hidden;
+      transform-style: preserve-3d;
     }
 
+    /* Interactive Spotlight Layer */
     .service-card::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(78, 163, 224, 0.08), transparent 70%);
+      background: radial-gradient(420px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(78, 163, 224, 0.1), transparent 70%);
       opacity: 0;
       transition: opacity 0.35s;
       pointer-events: none;
@@ -1065,10 +1139,10 @@
     }
 
     .service-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(78, 163, 224, 0.35);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(78, 163, 224, 0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(78, 163, 224, 0.15);
     }
 
     .service-icon {
@@ -1085,10 +1159,10 @@
     }
 
     .service-card:hover .service-icon {
-      background: rgba(78, 163, 224, 0.15);
-      border-color: rgba(78, 163, 224, 0.4);
+      background: rgba(78, 163, 224, 0.16);
+      border-color: rgba(78, 163, 224, 0.45);
       color: #ffffff;
-      box-shadow: 0 0 15px rgba(78, 163, 224, 0.3);
+      box-shadow: 0 0 18px rgba(78, 163, 224, 0.35);
     }
 
     .service-card-title {
@@ -1126,7 +1200,7 @@
     }
 
     /* ==========================================================================
-       SECTION 5: 3D WEBGL LAB (MOBILE CENTER FIX & ULTRA SMOOTH RENDER)
+       SECTION 5: 3D WEBGL LAB (100% DEAD CENTER ON MOBILE & DESKTOP)
        ========================================================================== */
     .lab-section {
       padding: 110px 0;
@@ -1150,21 +1224,20 @@
 
     @media (max-width: 640px) {
       .lab-canvas-container {
-        height: 390px;
-        border-radius: 18px;
+        height: 400px;
+        border-radius: 20px;
       }
     }
 
-    /* CRITICAL FIX: Explicitly lock canvas to 100% of container so pixel ratio never pushes models to the corner */
+    /* Explicitly lock canvas to 100% of container so pixel ratio never pushes models to the corner */
     .lab-canvas-container canvas {
       position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
+      inset: 0 !important;
       width: 100% !important;
       height: 100% !important;
       display: block !important;
       z-index: 1;
-      outline: none;
+      outline: none !important;
     }
 
     .lab-center-glow {
@@ -1175,7 +1248,7 @@
       width: 280px;
       height: 280px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(78, 163, 224, 0.22) 0%, rgba(168, 85, 247, 0.1) 40%, transparent 70%);
+      background: radial-gradient(circle, rgba(78, 163, 224, 0.25) 0%, rgba(168, 85, 247, 0.12) 40%, transparent 70%);
       filter: blur(55px);
       pointer-events: none;
       z-index: 0;
@@ -1191,7 +1264,7 @@
       gap: 8px;
       padding: 6px 14px;
       border-radius: 9999px;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.15);
       font-size: 11px;
       font-weight: 600;
@@ -1226,10 +1299,11 @@
 
     @media (max-width: 640px) {
       .lab-model-selector {
-        left: 12px;
-        right: 12px;
+        left: 10px;
+        right: 10px;
         bottom: 12px;
         justify-content: center;
+        gap: 6px;
       }
     }
 
@@ -1248,8 +1322,10 @@
 
     @media (max-width: 640px) {
       .lab-btn {
-        padding: 6px 14px;
-        font-size: 11.5px;
+        padding: 7px 10px;
+        font-size: 11px;
+        flex: 1 1 0;
+        text-align: center;
       }
     }
 
@@ -1261,7 +1337,7 @@
     }
 
     /* ==========================================================================
-       SECTION 6: WHY CHOOSE SRP.dev (6 Horizontal Connected Cards)
+       SECTION 6: WHY CHOOSE SRP.dev (Pipeline with Electric Laser Beam)
        ========================================================================== */
     .why-choose-section {
       padding: 120px 0;
@@ -1280,15 +1356,36 @@
       top: 50%;
       left: 0;
       right: 0;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.1);
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
       transform: translateY(-50%);
       display: none;
       z-index: 0;
     }
 
+    .why-line-laser {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 140px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4EA3E0, transparent);
+      box-shadow: 0 0 15px rgba(78, 163, 224, 0.9);
+      transform: translateY(-50%);
+      display: none;
+      z-index: 1;
+      animation: laserSweep 4s ease-in-out infinite;
+    }
+
     @media (min-width: 1024px) {
-      .why-line-bg { display: block; }
+      .why-line-bg, .why-line-laser { display: block; }
+    }
+
+    @keyframes laserSweep {
+      0% { left: 0%; opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { left: 90%; opacity: 0; }
     }
 
     .why-grid {
@@ -1296,7 +1393,7 @@
       grid-template-columns: 1fr;
       gap: 20px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
     @media (min-width: 768px) {
@@ -1318,13 +1415,14 @@
       min-height: 140px;
       position: relative;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      transition: all 0.25s;
+      transition: all 0.3s;
     }
 
     .why-card:hover {
       background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(78, 163, 224, 0.4);
-      transform: translateY(-3px);
+      border-color: rgba(78, 163, 224, 0.45);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(78, 163, 224, 0.2);
     }
 
     .why-card-text {
@@ -1409,7 +1507,7 @@
       align-items: center;
       justify-content: center;
       z-index: 10;
-      transition: all 0.3s;
+      transition: all 0.35s;
     }
 
     @media (min-width: 768px) {
@@ -1428,12 +1526,12 @@
       font-family: var(--font-mono);
       font-size: 13px;
       font-weight: 600;
-      transition: all 0.3s;
+      transition: all 0.35s;
     }
 
     .timeline-item:hover .timeline-badge {
       border-color: var(--accent-electric);
-      box-shadow: 0 0 20px rgba(78, 163, 224, 0.5);
+      box-shadow: 0 0 25px rgba(78, 163, 224, 0.6);
     }
 
     .timeline-item:hover .timeline-badge-inner {
@@ -1478,7 +1576,7 @@
     }
 
     /* ==========================================================================
-       SECTION 8: PRICING (ApproX Pricing with Currency Switcher)
+       SECTION 8: PRICING (Rotating Border Beam on Popular Tier)
        ========================================================================== */
     .pricing-section {
       padding: 120px 0;
@@ -1542,9 +1640,29 @@
       transform: translateY(-4px);
     }
 
+    /* Rotating Neon Border Beam on Featured Plan */
     .pricing-tier-card.featured {
-      border-color: rgba(78, 163, 224, 0.5);
-      box-shadow: 0 0 35px rgba(78, 163, 224, 0.15);
+      border-color: transparent;
+      box-shadow: 0 0 35px rgba(78, 163, 224, 0.2);
+    }
+
+    .pricing-tier-card.featured::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 25px;
+      padding: 1.5px;
+      background: conic-gradient(from 0deg at 50% 50%, #4EA3E0 0deg, #a855f7 120deg, transparent 200deg, #4EA3E0 360deg);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: borderSpin 5s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes borderSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .pricing-tier-h3 {
@@ -1833,6 +1951,9 @@
 </head>
 
 <body class="locked">
+  <!-- Live Top Scroll Progress Line -->
+  <div class="scroll-progress-line" id="scrollProgressLine"></div>
+
   <!-- Subtle Grid Mesh -->
   <div class="bg-grid-mesh"></div>
 
@@ -1842,6 +1963,11 @@
   <div class="luxury-preloader" id="luxuryPreloader">
     <div class="preloader-glow-orb"></div>
     <div class="preloader-box">
+      <div class="preloader-top-badge">
+        <span class="hero-pulse-dot"></span>
+        <span>SYSTEM CALIBRATION // 60 FPS</span>
+      </div>
+
       <div class="preloader-logo-ring">
         <div class="preloader-logo-inner">
           <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:24px'}))">
@@ -1849,14 +1975,14 @@
       </div>
 
       <div class="preloader-counter-wrap">
-        <span id="preloaderNum">0</span><span class="preloader-symbol">%</span>
+        <span id="preloaderNum">00</span><span class="preloader-symbol">%</span>
       </div>
 
       <div class="preloader-bar-bg">
         <div class="preloader-bar-fill" id="preloaderBar"></div>
       </div>
 
-      <div class="preloader-status-text">INITIALIZING DIGITAL CRAFT // SRP.DEV</div>
+      <div class="preloader-status-text" id="preloaderStatus">INITIALIZING CORE ENGINE...</div>
     </div>
   </div>
 
@@ -1866,7 +1992,7 @@
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <div class="brand-group">
-        <a href="#home" class="brand-logo" aria-label="SRP.dev Home">
+        <a href="#home" class="brand-logo tactile-press" aria-label="SRP.dev Home">
           <div class="brand-logo-img">
             <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:16px'}))">
           </div>
@@ -1876,23 +2002,23 @@
         </a>
 
         <nav class="nav-menu">
-          <a href="#services" class="nav-item">
+          <a href="#services" class="nav-item tactile-press">
             Services
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
-          <a href="#lab" class="nav-item">
+          <a href="#lab" class="nav-item tactile-press">
             3D Lab
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
-          <a href="#process" class="nav-item">
+          <a href="#process" class="nav-item tactile-press">
             Process
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
-          <a href="#pricing" class="nav-item">
+          <a href="#pricing" class="nav-item tactile-press">
             Pricing
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
-          <a href="#faq" class="nav-item">
+          <a href="#faq" class="nav-item tactile-press">
             FAQ
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
@@ -1900,13 +2026,13 @@
       </div>
 
       <div class="header-actions">
-        <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-pill-get-started">
+        <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-pill-get-started tactile-press">
           <div class="btn-pill-inner">
             <span>Get Started</span>
           </div>
         </a>
 
-        <button class="menu-toggle-btn" id="menuToggleBtn" aria-label="Toggle menu">
+        <button class="menu-toggle-btn tactile-press" id="menuToggleBtn" aria-label="Toggle menu">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
         </button>
       </div>
@@ -1915,11 +2041,11 @@
 
   <!-- Mobile Dropdown Menu -->
   <div class="mobile-nav-drawer" id="mobileNavDrawer">
-    <a href="#services">Services</a>
-    <a href="#lab">3D WebGL Lab</a>
-    <a href="#process">Process</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#faq">Questions &amp; Answers</a>
+    <a href="#services" class="tactile-press">Services</a>
+    <a href="#lab" class="tactile-press">3D WebGL Lab</a>
+    <a href="#process" class="tactile-press">Process</a>
+    <a href="#pricing" class="tactile-press">Pricing</a>
+    <a href="#faq" class="tactile-press">Questions &amp; Answers</a>
     <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" style="color:var(--accent-electric);font-weight:600;">Message on WhatsApp &rarr;</a>
   </div>
 
@@ -1953,14 +2079,14 @@
         </p>
 
         <div class="hero-cta-group reveal reveal-delay-3">
-          <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-discuss-project">
+          <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-discuss-project tactile-press">
             <div class="btn-sheen"></div>
             <div class="btn-discuss-inner">
               Discuss Your Project
             </div>
           </a>
 
-          <a href="#services" class="btn-explore-services">
+          <a href="#services" class="btn-explore-services tactile-press">
             Explore My Services
           </a>
         </div>
@@ -1968,7 +2094,7 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 2: WHAT I BUILD (Interactive Story Marquee)
+         SECTION 2: WHAT I BUILD (ApproX Interactive Kinetic Story Marquee)
          ========================================================================== -->
     <section class="story-marquee-section" aria-label="Web development services">
       <div class="story-ambient-glow"></div>
@@ -2002,7 +2128,7 @@
         <span class="story-item light">Frontend &amp; Backend</span>
         <span class="story-item grad">Built to grow</span>
 
-        <!-- Loop duplication -->
+        <!-- Duplicated loop for smooth infinite scroll -->
         <span class="story-item">Websites</span>
         <span class="story-item">
           <svg width="48" height="22" viewBox="0 0 100 24" fill="none">
@@ -2052,7 +2178,7 @@
 
         <div class="metrics-grid">
           <!-- Card 1 -->
-          <div class="metric-card reveal reveal-delay-1">
+          <div class="metric-card tactile-press reveal reveal-delay-1">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 01</span>
               <span class="metric-dot"></span>
@@ -2064,7 +2190,7 @@
           </div>
 
           <!-- Card 2 -->
-          <div class="metric-card reveal reveal-delay-2">
+          <div class="metric-card tactile-press reveal reveal-delay-2">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 02</span>
               <span class="metric-dot"></span>
@@ -2076,7 +2202,7 @@
           </div>
 
           <!-- Card 3 -->
-          <div class="metric-card reveal reveal-delay-3">
+          <div class="metric-card tactile-press reveal reveal-delay-3">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 03</span>
               <span class="metric-dot"></span>
@@ -2088,7 +2214,7 @@
           </div>
 
           <!-- Card 4 -->
-          <div class="metric-card reveal reveal-delay-4">
+          <div class="metric-card tactile-press reveal reveal-delay-4">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 04</span>
               <span class="metric-dot"></span>
@@ -2103,7 +2229,7 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 4: WHAT WE BUILD (Services)
+         SECTION 4: WHAT WE BUILD (Services with 3D Tilt & Spotlight)
          ========================================================================== -->
     <section class="services-section" id="services">
       <div class="container">
@@ -2114,7 +2240,7 @@
 
         <div class="services-grid">
           <!-- Service 1 -->
-          <div class="service-card reveal reveal-delay-1">
+          <div class="service-card tactile-press reveal reveal-delay-1">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             </div>
@@ -2127,7 +2253,7 @@
           </div>
 
           <!-- Service 2 -->
-          <div class="service-card reveal reveal-delay-2">
+          <div class="service-card tactile-press reveal reveal-delay-2">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
@@ -2140,7 +2266,7 @@
           </div>
 
           <!-- Service 3 -->
-          <div class="service-card reveal reveal-delay-3">
+          <div class="service-card tactile-press reveal reveal-delay-3">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
@@ -2153,7 +2279,7 @@
           </div>
 
           <!-- Service 4 -->
-          <div class="service-card reveal reveal-delay-1">
+          <div class="service-card tactile-press reveal reveal-delay-1">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
@@ -2166,7 +2292,7 @@
           </div>
 
           <!-- Service 5 -->
-          <div class="service-card reveal reveal-delay-2">
+          <div class="service-card tactile-press reveal reveal-delay-2">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
@@ -2179,7 +2305,7 @@
           </div>
 
           <!-- Service 6 -->
-          <div class="service-card reveal reveal-delay-3">
+          <div class="service-card tactile-press reveal reveal-delay-3">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             </div>
@@ -2195,8 +2321,8 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 5: 3D WEBGL LAB (MOBILE CENTER FIX & ULTRA SMOOTH RENDER)
-         ========================================================================== -->
+       SECTION 5: 3D WEBGL LAB (100% DEAD CENTER ON MOBILE & DESKTOP)
+       ========================================================================== -->
     <section class="lab-section" id="lab">
       <div class="container">
         <div class="section-center-head reveal">
@@ -2216,17 +2342,17 @@
           <div class="lab-hint">Drag cursor / touch to rotate geometry</div>
 
           <div class="lab-model-selector" id="modelControls">
-            <button class="lab-btn active" data-model="0">Torus Knot</button>
-            <button class="lab-btn" data-model="1">Crystal Core</button>
-            <button class="lab-btn" data-model="2">Cyber Orbit</button>
+            <button class="lab-btn tactile-press active" data-model="0">Torus Knot</button>
+            <button class="lab-btn tactile-press" data-model="1">Crystal Core</button>
+            <button class="lab-btn tactile-press" data-model="2">Cyber Orbit</button>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-       SECTION 6: WHY CHOOSE SRP.dev (6 Horizontal Connected Cards)
-       ========================================================================== -->
+       SECTION 6: WHY CHOOSE SRP.dev (Pipeline with Electric Laser Beam)
+       ========================================================================== */
     <section class="why-choose-section">
       <div class="container">
         <div class="section-center-head reveal">
@@ -2235,24 +2361,25 @@
 
         <div class="why-cards-track">
           <div class="why-line-bg"></div>
+          <div class="why-line-laser"></div>
 
           <div class="why-grid">
-            <div class="why-card reveal reveal-delay-1">
+            <div class="why-card tactile-press reveal reveal-delay-1">
               <span class="why-card-text">Built Around Your Business Needs</span>
             </div>
-            <div class="why-card reveal reveal-delay-2">
+            <div class="why-card tactile-press reveal reveal-delay-2">
               <span class="why-card-text">E-commerce &amp; Online Store Solutions</span>
             </div>
-            <div class="why-card reveal reveal-delay-3">
+            <div class="why-card tactile-press reveal reveal-delay-3">
               <span class="why-card-text">Smooth, Responsive, High-Performance Experience</span>
             </div>
-            <div class="why-card reveal reveal-delay-1">
+            <div class="why-card tactile-press reveal reveal-delay-1">
               <span class="why-card-text">Modern Technologies (React, Next.js, Node.js)</span>
             </div>
-            <div class="why-card reveal reveal-delay-2">
+            <div class="why-card tactile-press reveal reveal-delay-2">
               <span class="why-card-text">SEO-Friendly &amp; Conversion-Focused Structure</span>
             </div>
-            <div class="why-card reveal reveal-delay-3">
+            <div class="why-card tactile-press reveal reveal-delay-3">
               <span class="why-card-text">Reliable Delivery &amp; Ongoing Support</span>
             </div>
           </div>
@@ -2280,7 +2407,7 @@
               <div class="timeline-badge-inner">01</div>
             </div>
             <div class="timeline-content-box">
-              <div class="timeline-card">
+              <div class="timeline-card tactile-press">
                 <h3 class="timeline-phase-title">Phase 01: Business Needs &amp; Project Planning</h3>
                 <p class="timeline-phase-desc">We discuss your goals, requirements, target audience, and project scope to create a clear development plan.</p>
               </div>
@@ -2293,7 +2420,7 @@
               <div class="timeline-badge-inner">02</div>
             </div>
             <div class="timeline-content-box">
-              <div class="timeline-card">
+              <div class="timeline-card tactile-press">
                 <h3 class="timeline-phase-title">Phase 02: Website Design &amp; Development</h3>
                 <p class="timeline-phase-desc">Modern, mobile-first design and clean development, keeping you updated with progress previews.</p>
               </div>
@@ -2306,7 +2433,7 @@
               <div class="timeline-badge-inner">03</div>
             </div>
             <div class="timeline-content-box">
-              <div class="timeline-card">
+              <div class="timeline-card tactile-press">
                 <h3 class="timeline-phase-title">Phase 03: Backend, Database &amp; Integrations</h3>
                 <p class="timeline-phase-desc">Setting up forms, APIs, databases, payment gateways, and content management systems.</p>
               </div>
@@ -2319,7 +2446,7 @@
               <div class="timeline-badge-inner">04</div>
             </div>
             <div class="timeline-content-box">
-              <div class="timeline-card">
+              <div class="timeline-card tactile-press">
                 <h3 class="timeline-phase-title">Phase 04: Testing, Launch &amp; Final Delivery</h3>
                 <p class="timeline-phase-desc">Complete cross-browser testing, mobile responsiveness checks, speed optimization, and deployment.</p>
               </div>
@@ -2330,7 +2457,7 @@
     </section>
 
     <!-- ==========================================================================
-       SECTION 8: PRICING (ApproX Pricing with Currency Switcher)
+       SECTION 8: PRICING (Rotating Border Beam on Popular Tier)
        ========================================================================== -->
     <section class="pricing-section" id="pricing">
       <div class="container">
@@ -2342,7 +2469,7 @@
         <!-- Currency Selector -->
         <div class="currency-switch-box reveal">
           <label for="currencySelect">Choose your currency:</label>
-          <select id="currencySelect" class="currency-dropdown" aria-label="Choose pricing currency">
+          <select id="currencySelect" class="currency-dropdown tactile-press" aria-label="Choose pricing currency">
             <option value="BDT" selected>BDT (৳) &mdash; Bangladeshi Taka</option>
             <option value="USD">USD ($) &mdash; US Dollar</option>
             <option value="PKR">PKR (Rs.) &mdash; Pakistani Rupee</option>
@@ -2352,7 +2479,7 @@
 
         <div class="pricing-grid">
           <!-- Plan 1 -->
-          <div class="pricing-tier-card reveal reveal-delay-1">
+          <div class="pricing-tier-card tactile-press reveal reveal-delay-1">
             <h3 class="pricing-tier-h3">Starter Website</h3>
             <p class="pricing-tier-tagline">For individuals and small businesses</p>
             <div class="pricing-tier-price" id="priceTier1" data-bdt="৳ 15,000" data-usd="$120" data-pkr="Rs. 25,000" data-inr="₹ 10,000">৳ 15,000</div>
@@ -2381,13 +2508,13 @@
               </li>
             </ul>
 
-            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20am%20interested%20in%20the%20Starter%20Website%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark">
+            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20am%20interested%20in%20the%20Starter%20Website%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark tactile-press">
               Get Started
             </a>
           </div>
 
-          <!-- Plan 2 (Featured) -->
-          <div class="pricing-tier-card featured reveal reveal-delay-2">
+          <!-- Plan 2 (Featured with Rotating Border Beam) -->
+          <div class="pricing-tier-card featured tactile-press reveal reveal-delay-2">
             <h3 class="pricing-tier-h3">Business Growth</h3>
             <p class="pricing-tier-tagline">For growing brands and eCommerce</p>
             <div class="pricing-tier-price" id="priceTier2" data-bdt="৳ 32,000" data-usd="$250" data-pkr="Rs. 55,000" data-inr="₹ 22,000">৳ 32,000</div>
@@ -2420,13 +2547,13 @@
               </li>
             </ul>
 
-            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20am%20interested%20in%20the%20Business%20Growth%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn white">
+            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20am%20interested%20in%20the%20Business%20Growth%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn white tactile-press">
               Get Started
             </a>
           </div>
 
           <!-- Plan 3 -->
-          <div class="pricing-tier-card reveal reveal-delay-3">
+          <div class="pricing-tier-card tactile-press reveal reveal-delay-3">
             <h3 class="pricing-tier-h3">Custom Web Solution</h3>
             <p class="pricing-tier-tagline">For specialized business applications</p>
             <div class="pricing-tier-price" id="priceTier3" data-bdt="৳ 55,000+" data-usd="$450+" data-pkr="Rs. 95,000+" data-inr="₹ 38,000+">৳ 55,000+</div>
@@ -2459,7 +2586,7 @@
               </li>
             </ul>
 
-            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20need%20a%20Custom%20Web%20Solution." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark">
+            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20need%20a%20Custom%20Web%20Solution." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark tactile-press">
               Contact for Quote
             </a>
           </div>
@@ -2468,8 +2595,8 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 9: FAQ ACCORDION (ApproX Style)
-         ========================================================================== -->
+       SECTION 9: FAQ ACCORDION (ApproX Style)
+       ========================================================================== -->
     <section class="faq-section" id="faq">
       <div class="container">
         <div class="section-center-head reveal">
@@ -2478,7 +2605,7 @@
 
         <div class="faq-container">
           <div class="faq-box reveal">
-            <button class="faq-q-btn">
+            <button class="faq-q-btn tactile-press">
               <span class="faq-q-text">Do I need to provide hosting and a domain?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2488,7 +2615,7 @@
           </div>
 
           <div class="faq-box reveal">
-            <button class="faq-q-btn">
+            <button class="faq-q-btn tactile-press">
               <span class="faq-q-text">How long does it take to build a website?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2498,7 +2625,7 @@
           </div>
 
           <div class="faq-box reveal">
-            <button class="faq-q-btn">
+            <button class="faq-q-btn tactile-press">
               <span class="faq-q-text">Can you add online payments to my store?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2508,7 +2635,7 @@
           </div>
 
           <div class="faq-box reveal">
-            <button class="faq-q-btn">
+            <button class="faq-q-btn tactile-press">
               <span class="faq-q-text">Will my website be mobile-friendly?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2518,7 +2645,7 @@
           </div>
 
           <div class="faq-box reveal">
-            <button class="faq-q-btn">
+            <button class="faq-q-btn tactile-press">
               <span class="faq-q-text">Do you provide support after the website is launched?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
@@ -2541,14 +2668,14 @@
         <p class="cta-subtext">Whether you need a new business website, an eCommerce store, or a custom web app &mdash; let&rsquo;s make it happen.</p>
 
         <div class="hero-cta-group">
-          <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-discuss-project">
+          <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-discuss-project tactile-press">
             <div class="btn-sheen"></div>
             <div class="btn-discuss-inner">
               Discuss Your Project on WhatsApp
             </div>
           </a>
 
-          <a href="#services" class="btn-explore-services">
+          <a href="#services" class="btn-explore-services tactile-press">
             Explore Services
           </a>
         </div>
@@ -2563,7 +2690,7 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <a href="#home" class="brand-logo" aria-label="SRP.dev Home">
+          <a href="#home" class="brand-logo tactile-press" aria-label="SRP.dev Home">
             <div class="brand-logo-img">
               <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:16px'}))">
             </div>
@@ -2579,11 +2706,11 @@
         <div>
           <h4 class="footer-h4">Explore</h4>
           <ul class="footer-links-list">
-            <li><a href="#services">Services</a></li>
-            <li><a href="#lab">3D WebGL Lab</a></li>
-            <li><a href="#process">Process</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#services" class="tactile-press">Services</a></li>
+            <li><a href="#lab" class="tactile-press">3D WebGL Lab</a></li>
+            <li><a href="#process" class="tactile-press">Process</a></li>
+            <li><a href="#pricing" class="tactile-press">Pricing</a></li>
+            <li><a href="#faq" class="tactile-press">FAQ</a></li>
           </ul>
         </div>
 
@@ -2591,11 +2718,11 @@
           <h4 class="footer-h4">Get in Touch</h4>
           <ul class="footer-links-list">
             <li>
-              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" style="color:var(--accent-electric);font-weight:600;">
+              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="tactile-press" style="color:var(--accent-electric);font-weight:600;">
                 WhatsApp: +880 1852-093429
               </a>
             </li>
-            <li><a href="https://www.facebook.com/share/1DHQYHYcpn/" target="_blank" rel="noopener noreferrer">Facebook Page</a></li>
+            <li><a href="https://www.facebook.com/share/1DHQYHYcpn/" target="_blank" rel="noopener noreferrer" class="tactile-press">Facebook Page</a></li>
             <li><span style="color:rgba(255,255,255,0.4);font-size:13.5px;">Replies within 24 hours</span></li>
           </ul>
         </div>
@@ -2603,8 +2730,8 @@
         <div>
           <h4 class="footer-h4">Connect</h4>
           <ul class="footer-links-list">
-            <li><a href="https://github.com/automation1900-ui" target="_blank" rel="noopener noreferrer">GitHub Profile</a></li>
-            <li><a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer">Direct Chat</a></li>
+            <li><a href="https://github.com/automation1900-ui" target="_blank" rel="noopener noreferrer" class="tactile-press">GitHub Profile</a></li>
+            <li><a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="tactile-press">Direct Chat</a></li>
           </ul>
         </div>
       </div>
@@ -2617,16 +2744,17 @@
   </footer>
 
   <!-- ==========================================================================
-       SCRIPTS: PRELOADER, SCRAMBLE, 3D MOBILE FIX, GSAP REVEALS, CURRENCY
+       SCRIPTS: PRELOADER, SCRAMBLE, 3D MOBILE FIX, GSAP REVEALS, RIPPLE
        ========================================================================== -->
   <script>
     (function() {
       'use strict';
 
-      /* --- 1. Luxury 0 - 100% Preloader with Smooth Page Unlock --- */
+      /* --- 1. Luxury 0 - 100% Preloader with Dynamic Terminal Status --- */
       const preloader = document.getElementById('luxuryPreloader');
       const preloaderNum = document.getElementById('preloaderNum');
       const preloaderBar = document.getElementById('preloaderBar');
+      const preloaderStatus = document.getElementById('preloaderStatus');
 
       let currentPercent = 0;
       const targetPercent = 100;
@@ -2634,8 +2762,24 @@
       const intervalTime = 20;
       const step = targetPercent / (duration / intervalTime);
 
+      const statusMessages = [
+        { threshold: 0, text: 'INITIALIZING THREE.JS WEBGL KERNEL...' },
+        { threshold: 30, text: 'LOADING 60 FPS GRAPHICS ENGINE...' },
+        { threshold: 65, text: 'CALIBRATING GSAP SCROLL TRIGGERS...' },
+        { threshold: 90, text: 'SYSTEM READY // LAUNCHING SRP.DEV' }
+      ];
+
       const preloaderTimer = setInterval(function() {
         currentPercent += step + (Math.random() * 2.2);
+
+        // Update status text
+        for (let i = statusMessages.length - 1; i >= 0; i--) {
+          if (currentPercent >= statusMessages[i].threshold) {
+            preloaderStatus.textContent = statusMessages[i].text;
+            break;
+          }
+        }
+
         if (currentPercent >= targetPercent) {
           currentPercent = 100;
           preloaderNum.textContent = '100';
@@ -2646,15 +2790,53 @@
             preloader.classList.add('done');
             document.body.classList.remove('locked');
             initGSAPAnimations();
-          }, 280);
+            window.dispatchEvent(new Event('resize'));
+          }, 300);
         } else {
           const val = Math.floor(currentPercent);
-          preloaderNum.textContent = val;
+          preloaderNum.textContent = val < 10 ? '0' + val : val;
           preloaderBar.style.width = val + '%';
         }
       }, intervalTime);
 
-      /* --- 2. Animated Code Scramble for .dev --- */
+      /* --- 2. Live Top Scroll Progress Line --- */
+      const scrollLine = document.getElementById('scrollProgressLine');
+      window.addEventListener('scroll', function() {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+        scrollLine.style.width = pct + '%';
+      }, { passive: true });
+
+      /* --- 3. Premium Liquid Ripple & Tactile Click Feedback (NO BLUE BORDER) --- */
+      document.addEventListener('pointerdown', function(e) {
+        // Prevent default tap highlight
+        const target = e.target.closest('a, button, .service-card, .metric-card, .why-card, .timeline-card, .pricing-tier-card, .faq-box');
+        if (!target) return;
+
+        // Subtle haptic tap
+        if (navigator.vibrate) {
+          try { navigator.vibrate(8); } catch (err) {}
+        }
+
+        // Spawn custom electric liquid ripple
+        const rect = target.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 1.6;
+        const ripple = document.createElement('span');
+        ripple.className = 'click-ripple';
+        ripple.style.width = size + 'px';
+        ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top = (e.clientY - rect.top) + 'px';
+
+        target.style.position = target.style.position || 'relative';
+        target.appendChild(ripple);
+
+        setTimeout(function() {
+          if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+        }, 700);
+      }, { passive: true });
+
+      /* --- 4. Animated Code Scramble for .dev --- */
       const scrambleEls = document.querySelectorAll('.dev-scramble');
       const GLYPHS = '!<>-_\\/[]{}=+*^?#________';
 
@@ -2699,9 +2881,8 @@
         });
       });
 
-      /* --- 3. GSAP & ScrollTrigger Animations --- */
+      /* --- 5. GSAP & ScrollTrigger Animations --- */
       function initGSAPAnimations() {
-        // Register ScrollTrigger if available
         if (window.gsap && window.ScrollTrigger) {
           gsap.registerPlugin(ScrollTrigger);
 
@@ -2711,7 +2892,7 @@
           gsap.fromTo('.hero-desc', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.3 });
           gsap.fromTo('.hero-cta-group', { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(1.5)', delay: 0.45 });
 
-          // Timeline progress fill animation
+          // Timeline vertical beam drawing
           const timelineFill = document.getElementById('timelineProgressFill');
           if (timelineFill) {
             gsap.to(timelineFill, {
@@ -2726,13 +2907,26 @@
             });
           }
 
-          // Service card mouse hover spotlight
+          // Service card mouse hover spotlight & subtle 3D tilt
           const cards = document.querySelectorAll('.service-card');
           cards.forEach(function(card) {
             card.addEventListener('pointermove', function(e) {
               const r = card.getBoundingClientRect();
-              card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-              card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
+              const x = e.clientX - r.left;
+              const y = e.clientY - r.top;
+              card.style.setProperty('--mouse-x', x + 'px');
+              card.style.setProperty('--mouse-y', y + 'px');
+
+              // 3D subtle tilt
+              const centerX = r.width / 2;
+              const centerY = r.height / 2;
+              const tiltX = (y - centerY) / centerY * -6;
+              const tiltY = (x - centerX) / centerX * 6;
+              card.style.transform = 'perspective(1000px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) translateY(-6px)';
+            });
+
+            card.addEventListener('pointerleave', function() {
+              card.style.transform = '';
             });
           });
         }
@@ -2753,7 +2947,7 @@
         });
       }
 
-      /* --- 4. Sticky Header --- */
+      /* --- 6. Sticky Header --- */
       const header = document.getElementById('siteHeader');
       window.addEventListener('scroll', function() {
         if (window.scrollY > 40) {
@@ -2763,7 +2957,7 @@
         }
       }, { passive: true });
 
-      /* --- 5. Mobile Drawer --- */
+      /* --- 7. Mobile Drawer --- */
       const menuBtn = document.getElementById('menuToggleBtn');
       const drawer = document.getElementById('mobileNavDrawer');
       if (menuBtn && drawer) {
@@ -2783,7 +2977,7 @@
         });
       }
 
-      /* --- 6. Number Counter Animation --- */
+      /* --- 8. Number Counter Animation --- */
       const counters = document.querySelectorAll('.counter');
       const counterObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -2807,7 +3001,7 @@
       }, { threshold: 0.2 });
       counters.forEach(function(c) { counterObs.observe(c); });
 
-      /* --- 7. Interactive 3D WebGL Lab with 100% Dead-Center Mobile Fix --- */
+      /* --- 9. Interactive 3D WebGL Lab with 100% Dead-Center Mobile Fix --- */
       function init3DLab() {
         const wrap = document.getElementById('webglBox');
         if (!wrap || !window.THREE) return;
@@ -2866,26 +3060,41 @@
 
         // Responsive Sizing & Dead-Center Alignment
         function updateSize() {
-          const w = wrap.clientWidth || 360;
-          const h = wrap.clientHeight || 390;
+          const rect = wrap.getBoundingClientRect();
+          const w = Math.round(rect.width) || wrap.clientWidth || 360;
+          const h = Math.round(rect.height) || wrap.clientHeight || 400;
+          if (w <= 0 || h <= 0) return;
+
           camera.aspect = w / h;
 
           // Camera distance dynamically adjusts so models are NEVER clipped on mobile
           if (camera.aspect < 1) {
-            camera.position.set(0, 0, Math.max(7.2, 5.8 / camera.aspect));
-            group.scale.set(0.82, 0.82, 0.82);
+            // Optical center lifted slightly (+0.25 Y) so it floats gracefully above the bottom buttons
+            camera.position.set(0, 0.25, Math.max(7.4, 6.0 / camera.aspect));
+            group.scale.set(0.76, 0.76, 0.76);
           } else {
             camera.position.set(0, 0, 6.8);
             group.scale.set(1.0, 1.0, 1.0);
           }
 
+          camera.lookAt(0, 0, 0);
           camera.updateProjectionMatrix();
-          // Passing true ensures canvas styles are updated and stay 100% matched to container
           renderer.setSize(w, h, true);
         }
 
         updateSize();
         window.addEventListener('resize', updateSize, { passive: true });
+        window.addEventListener('orientationchange', function() {
+          setTimeout(updateSize, 120);
+        });
+
+        if (window.ResizeObserver) {
+          try {
+            new ResizeObserver(function() {
+              updateSize();
+            }).observe(wrap);
+          } catch (e) {}
+        }
 
         // Touch & Drag controls with smooth inertia
         let isDragging = false;
@@ -2912,10 +3121,18 @@
         wrap.addEventListener('pointerup', stopDrag);
         wrap.addEventListener('pointercancel', stopDrag);
 
-        // Model Switcher Buttons
+        // Model Switcher Buttons (Stop pointer propagation to avoid dragging 3D object when tapping buttons)
+        const ctrlBox = document.getElementById('modelControls');
+        if (ctrlBox) {
+          ctrlBox.addEventListener('pointerdown', function(e) {
+            e.stopPropagation();
+          });
+        }
+
         const btns = document.querySelectorAll('#modelControls button');
         btns.forEach(function(btn) {
-          btn.addEventListener('click', function() {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
             const idx = +btn.getAttribute('data-model');
             btns.forEach(function(b) { b.classList.toggle('active', b === btn); });
             models.forEach(function(m, i) { m.visible = (i === idx); });
@@ -2924,10 +3141,15 @@
           });
         });
 
-        // Auto pause off-screen to preserve battery
+        // Auto pause off-screen to preserve battery & recalibrate size on scroll into view
         let isVis = true;
         new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) { isVis = e.isIntersecting; });
+          entries.forEach(function(e) {
+            isVis = e.isIntersecting;
+            if (isVis) {
+              updateSize();
+            }
+          });
         }, { threshold: 0.05 }).observe(wrap);
 
         let t = 0;
@@ -2965,7 +3187,7 @@
         });
       }
 
-      /* --- 8. Dynamic Currency Converter --- */
+      /* --- 10. Dynamic Currency Converter --- */
       const currSelect = document.getElementById('currencySelect');
       if (currSelect) {
         currSelect.addEventListener('change', function() {
@@ -2980,7 +3202,7 @@
         });
       }
 
-      /* --- 9. FAQ Accordion --- */
+      /* --- 11. FAQ Accordion --- */
       const faqBoxes = document.querySelectorAll('.faq-box');
       faqBoxes.forEach(function(box) {
         const btn = box.querySelector('.faq-q-btn');
