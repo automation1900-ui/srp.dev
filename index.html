@@ -2,23 +2,23 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>APPROX Coding | Web Development &amp; Digital Solutions</title>
-  <meta name="description" content="APPROX Coding creates modern, responsive websites, creative web experiences, custom web applications, and interactive digital solutions. Explore web development projects and services by SRP.dev." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SRP.dev | Web Development &amp; Digital Solutions</title>
+  <meta name="description" content="SRP.dev creates modern, responsive websites, creative web experiences, custom web applications, and interactive 3D digital solutions." />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" type="image/png" href="Srplogo.png" />
 
   <!-- Google Fonts: Sora, Inter, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Three.js for 3D WebGL Showcase -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 
   <style>
     /* ==========================================================================
-       APPROX CODING THEME TOKENS & RESET
+       THEME VARIABLES & RESET
        ========================================================================== */
     *, *::before, *::after {
       margin: 0;
@@ -28,9 +28,10 @@
 
     :root {
       --accent-electric: #4EA3E0;
-      --accent-electric-glow: rgba(78, 163, 224, 0.4);
+      --accent-electric-glow: rgba(78, 163, 224, 0.45);
       --accent-light: #78B8E8;
       --accent-purple: #a855f7;
+      --grad-electric: linear-gradient(90deg, #4EA3E0 0%, #a855f7 100%);
       --font-heading: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
@@ -54,6 +55,11 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+    }
+
+    body.locked {
+      overflow: hidden !important;
+      height: 100vh;
     }
 
     ::selection {
@@ -83,19 +89,168 @@
       position: relative;
     }
 
-    /* Subtle background grid & lighting */
-    .bg-ambient-light {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(78, 163, 224, 0.12) 0%, transparent 70%);
-      filter: blur(100px);
-      pointer-events: none;
+    /* Ambient noise & grid */
+    .bg-grid-mesh {
+      position: fixed;
+      inset: 0;
       z-index: 0;
+      opacity: 0.035;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
     }
 
     /* ==========================================================================
-       HEADER & NAVIGATION (ApproX Floating Glass Header)
+       LUXURY PRELOADER (0 - 100% SMOOTH ANIMATION)
+       ========================================================================== */
+    .luxury-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s var(--ease), visibility 0.8s var(--ease);
+    }
+
+    .luxury-preloader.done {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .preloader-glow-orb {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(78, 163, 224, 0.16) 0%, transparent 70%);
+      filter: blur(80px);
+      border-radius: 50%;
+      animation: pulsePreloader 2.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulsePreloader {
+      0%, 100% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .preloader-box {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .preloader-logo-ring {
+      width: 74px;
+      height: 74px;
+      border-radius: 20px;
+      padding: 3px;
+      background: linear-gradient(135deg, rgba(78, 163, 224, 0.6), rgba(168, 85, 247, 0.4));
+      margin-bottom: 24px;
+      box-shadow: 0 0 35px rgba(78, 163, 224, 0.4);
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .preloader-logo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 17px;
+      overflow: hidden;
+      background: #0a0a0f;
+      display: grid;
+      place-items: center;
+    }
+
+    .preloader-logo-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preloader-counter-wrap {
+      display: flex;
+      align-items: baseline;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: clamp(48px, 9vw, 84px);
+      letter-spacing: -0.05em;
+      color: #ffffff;
+      line-height: 1;
+      margin-bottom: 14px;
+      text-shadow: 0 0 40px rgba(78, 163, 224, 0.5);
+    }
+
+    .preloader-symbol {
+      font-size: clamp(20px, 3.5vw, 32px);
+      color: var(--accent-electric);
+      margin-left: 4px;
+    }
+
+    .preloader-bar-bg {
+      width: 260px;
+      height: 3px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .preloader-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--grad-electric);
+      box-shadow: 0 0 12px var(--accent-electric);
+      transition: width 0.08s linear;
+    }
+
+    .preloader-status-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    /* ==========================================================================
+       SMOOTH SCROLL REVEAL ANIMATIONS
+       ========================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px) scale(0.98);
+      transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+      will-change: opacity, transform;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION (SRP.dev WITH CODING ANIMATED BADGE)
        ========================================================================== */
     .site-header {
       position: fixed;
@@ -103,31 +258,27 @@
       left: 0;
       right: 0;
       z-index: 100;
-      padding: 24px 24px;
+      padding: 22px 24px;
       transition: all 0.4s var(--ease);
       border-bottom: 1px solid transparent;
       background: transparent;
     }
 
     @media (min-width: 768px) {
-      .site-header {
-        padding: 20px 48px;
-      }
+      .site-header { padding: 18px 48px; }
     }
     @media (min-width: 1200px) {
-      .site-header {
-        padding: 20px 120px;
-      }
+      .site-header { padding: 18px 120px; }
     }
 
     .site-header.scrolled {
-      background: rgba(0, 0, 0, 0.82);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 14px;
-      padding-bottom: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      padding-top: 12px;
+      padding-bottom: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
     }
 
     .header-inner {
@@ -142,28 +293,30 @@
       gap: 50px;
     }
 
+    /* SRP.dev Brand Logo & Scramble Badge */
     .brand-logo {
       display: flex;
       align-items: center;
       gap: 10px;
       font-family: var(--font-heading);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 20px;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
       color: #ffffff;
       shrink: 0;
       z-index: 50;
     }
 
     .brand-logo-img {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.05);
       display: grid;
       place-items: center;
+      box-shadow: 0 0 15px rgba(78, 163, 224, 0.25);
     }
 
     .brand-logo-img img {
@@ -172,26 +325,72 @@
       object-fit: cover;
     }
 
-    .brand-logo-text span {
+    .brand-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-srp {
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    /* Animated .dev Coding Chip */
+    .brand-dev-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2.5px 8px;
+      border-radius: 6px;
       color: var(--accent-electric);
+      background: rgba(78, 163, 224, 0.12);
+      border: 1px solid rgba(78, 163, 224, 0.35);
+      box-shadow: 0 0 14px rgba(78, 163, 224, 0.15);
+      transition: all 0.3s;
+    }
+
+    .brand-logo:hover .brand-dev-chip {
+      background: rgba(78, 163, 224, 0.25);
+      border-color: rgba(78, 163, 224, 0.6);
+      box-shadow: 0 0 20px rgba(78, 163, 224, 0.35);
+      color: #ffffff;
+    }
+
+    .brand-caret {
+      display: inline-block;
+      width: 2px;
+      height: 11px;
+      border-radius: 1px;
+      background: var(--accent-electric);
+      box-shadow: 0 0 8px var(--accent-electric);
+      animation: caretBlink 1.05s steps(1) infinite;
+    }
+
+    @keyframes caretBlink {
+      0%, 48% { opacity: 1; }
+      49%, 100% { opacity: 0; }
     }
 
     .nav-menu {
       display: none;
       align-items: center;
-      gap: 30px;
+      gap: 28px;
     }
 
     @media (min-width: 768px) {
-      .nav-menu {
-        display: flex;
-      }
+      .nav-menu { display: flex; }
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-size: 14px;
       font-weight: 500;
       color: rgba(255, 255, 255, 0.8);
@@ -216,24 +415,7 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 16px;
-    }
-
-    .search-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: rgba(255, 255, 255, 0.5);
-      border: 1px solid transparent;
-      transition: all 0.25s;
-    }
-
-    .search-btn:hover {
-      color: var(--accent-electric);
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.1);
+      gap: 14px;
     }
 
     .btn-pill-get-started {
@@ -241,15 +423,16 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.6px;
+      padding: 0.8px;
       border-radius: 9999px;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--grad-electric);
+      box-shadow: 0 0 20px rgba(78, 163, 224, 0.3);
       transition: all 0.25s;
     }
 
     .btn-pill-get-started:hover {
-      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 28px rgba(78, 163, 224, 0.55);
       transform: scale(1.02);
     }
 
@@ -266,7 +449,7 @@
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       color: #ffffff;
       white-space: nowrap;
     }
@@ -279,12 +462,9 @@
     }
 
     @media (min-width: 768px) {
-      .menu-toggle-btn {
-        display: none;
-      }
+      .menu-toggle-btn { display: none; }
     }
 
-    /* Mobile Drawer */
     .mobile-nav-drawer {
       position: fixed;
       top: 76px;
@@ -327,7 +507,7 @@
     }
 
     /* ==========================================================================
-       SECTION 1: VIDEO HERO (ApproX Coding Exact Hero)
+       SECTION 1: VIDEO HERO (ApproX Exact Hero Layout)
        ========================================================================== */
     .hero-section {
       position: relative;
@@ -372,7 +552,7 @@
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.48);
       z-index: 1;
       pointer-events: none;
     }
@@ -466,28 +646,25 @@
     }
 
     @media (min-width: 640px) {
-      .hero-cta-group {
-        flex-direction: row;
-      }
+      .hero-cta-group { flex-direction: row; }
     }
 
-    /* Primary glowing white button */
     .btn-discuss-project {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.6px;
+      padding: 0.8px;
       border-radius: 9999px;
       overflow: hidden;
-      background: rgba(78, 163, 224, 0.4);
-      box-shadow: 0 0 25px rgba(78, 163, 224, 0.3);
+      background: rgba(78, 163, 224, 0.5);
+      box-shadow: 0 0 25px rgba(78, 163, 224, 0.35);
       transition: all 0.25s;
     }
 
     .btn-discuss-project:hover {
-      background: rgba(78, 163, 224, 0.7);
-      box-shadow: 0 0 35px rgba(78, 163, 224, 0.5);
+      background: rgba(78, 163, 224, 0.8);
+      box-shadow: 0 0 35px rgba(78, 163, 224, 0.6);
       transform: scale(1.02);
     }
 
@@ -503,7 +680,7 @@
       width: 50%;
       height: 3px;
       background: #ffffff;
-      opacity: 0.8;
+      opacity: 0.85;
       filter: blur(4px);
       transition: all 0.3s;
     }
@@ -560,8 +737,8 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       background: #030712;
       padding: 90px 0;
     }
@@ -580,7 +757,7 @@
       width: 900px;
       height: 300px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(ellipse at center, rgba(78, 163, 224, 0.08) 0%, transparent 65%);
+      background: radial-gradient(ellipse at center, rgba(78, 163, 224, 0.09) 0%, transparent 65%);
       pointer-events: none;
     }
 
@@ -590,18 +767,18 @@
       top: 28px;
       transform: translateX(-50%);
       white-space: nowrap;
-      font-size: 9px;
+      font-size: 9.5px;
       font-weight: 600;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.38);
       z-index: 20;
     }
 
     .story-track {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 28px;
       width: max-content;
       animation: storyScroll 45s linear infinite;
       user-select: none;
@@ -655,9 +832,7 @@
     }
 
     @media (min-width: 768px) {
-      .metrics-section {
-        padding: 120px 0;
-      }
+      .metrics-section { padding: 120px 0; }
     }
 
     .metrics-header {
@@ -712,9 +887,7 @@
     }
 
     @media (min-width: 768px) {
-      .metrics-header-desc {
-        text-align: right;
-      }
+      .metrics-header-desc { text-align: right; }
     }
 
     .metrics-grid {
@@ -724,14 +897,10 @@
     }
 
     @media (min-width: 640px) {
-      .metrics-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (min-width: 1024px) {
-      .metrics-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
+      .metrics-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
     .metric-card {
@@ -826,7 +995,7 @@
     .services-section {
       padding: 120px 0;
       position: relative;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
@@ -847,7 +1016,7 @@
     .section-subheading {
       font-size: 18px;
       color: rgba(255, 255, 255, 0.6);
-      max-width: 600px;
+      max-width: 620px;
       margin: 0 auto;
       line-height: 1.6;
     }
@@ -859,14 +1028,10 @@
     }
 
     @media (min-width: 768px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (min-width: 1024px) {
-      .services-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .services-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     .service-card {
@@ -884,6 +1049,7 @@
       background: rgba(255, 255, 255, 0.04);
       border-color: rgba(78, 163, 224, 0.35);
       transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
     .service-icon {
@@ -941,12 +1107,12 @@
     }
 
     /* ==========================================================================
-       SECTION 5: 3D WEBGL LAB (Integrated Interactive Showcase)
+       SECTION 5: 3D WEBGL LAB (MOBILE ADAPTIVE & SMOOTH GESTURES)
        ========================================================================== */
     .lab-section {
       padding: 110px 0;
       position: relative;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
@@ -960,12 +1126,20 @@
       overflow: hidden;
       margin-bottom: 24px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      touch-action: pan-y;
+    }
+
+    @media (max-width: 640px) {
+      .lab-canvas-container {
+        height: 380px;
+        border-radius: 18px;
+      }
     }
 
     .lab-top-tag {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 16px;
+      left: 16px;
       z-index: 10;
       display: inline-flex;
       align-items: center;
@@ -981,13 +1155,37 @@
       backdrop-filter: blur(10px);
     }
 
-    .lab-model-selector {
+    .lab-hint {
       position: absolute;
       bottom: 20px;
-      right: 20px;
+      left: 20px;
+      z-index: 10;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-family: var(--font-mono);
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .lab-hint { display: block; }
+    }
+
+    .lab-model-selector {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
       z-index: 10;
       display: flex;
       gap: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .lab-model-selector {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        justify-content: center;
+      }
     }
 
     .lab-btn {
@@ -1000,6 +1198,14 @@
       color: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
       transition: all 0.25s;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .lab-btn {
+        padding: 6px 14px;
+        font-size: 11.5px;
+      }
     }
 
     .lab-btn.active, .lab-btn:hover {
@@ -1010,12 +1216,12 @@
     }
 
     /* ==========================================================================
-       SECTION 6: WHY CHOOSE APPROX CODING (6 Horizontal Connected Cards)
+       SECTION 6: WHY CHOOSE SRP.dev (6 Horizontal Connected Cards)
        ========================================================================== */
     .why-choose-section {
       padding: 120px 0;
       position: relative;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
@@ -1037,9 +1243,7 @@
     }
 
     @media (min-width: 1024px) {
-      .why-line-bg {
-        display: block;
-      }
+      .why-line-bg { display: block; }
     }
 
     .why-grid {
@@ -1051,14 +1255,10 @@
     }
 
     @media (min-width: 768px) {
-      .why-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .why-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (min-width: 1024px) {
-      .why-grid {
-        grid-template-columns: repeat(6, 1fr);
-      }
+      .why-grid { grid-template-columns: repeat(6, 1fr); }
     }
 
     .why-card {
@@ -1096,7 +1296,7 @@
       padding: 120px 0;
       position: relative;
       overflow: hidden;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .timeline-container {
@@ -1117,9 +1317,7 @@
     }
 
     @media (min-width: 768px) {
-      .timeline-center-line {
-        left: 50%;
-      }
+      .timeline-center-line { left: 50%; }
     }
 
     .timeline-item {
@@ -1157,9 +1355,7 @@
     }
 
     @media (min-width: 768px) {
-      .timeline-badge {
-        left: 50%;
-      }
+      .timeline-badge { left: 50%; }
     }
 
     .timeline-badge-inner {
@@ -1190,15 +1386,9 @@
     }
 
     @media (min-width: 768px) {
-      .timeline-content-box {
-        width: 50%;
-      }
-      .timeline-item:nth-child(odd) .timeline-content-box {
-        padding-right: 50px;
-      }
-      .timeline-item:nth-child(even) .timeline-content-box {
-        padding-left: 50px;
-      }
+      .timeline-content-box { width: 50%; }
+      .timeline-item:nth-child(odd) .timeline-content-box { padding-right: 50px; }
+      .timeline-item:nth-child(even) .timeline-content-box { padding-left: 50px; }
     }
 
     .timeline-card {
@@ -1234,7 +1424,7 @@
     .pricing-section {
       padding: 120px 0;
       position: relative;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
@@ -1274,9 +1464,7 @@
     }
 
     @media (min-width: 1024px) {
-      .pricing-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .pricing-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     .pricing-tier-card {
@@ -1390,7 +1578,7 @@
     .faq-section {
       padding: 120px 0;
       position: relative;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .faq-container {
@@ -1468,7 +1656,7 @@
     .cta-final-section {
       padding: 130px 0;
       position: relative;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       overflow: hidden;
       text-align: center;
     }
@@ -1511,7 +1699,7 @@
     }
 
     /* ==========================================================================
-       FOOTER (ApproX Clean 4-Column Layout)
+       FOOTER (SRP.dev 4-Column Layout)
        ========================================================================== */
     footer {
       border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1580,34 +1768,57 @@
     }
 
     @media (min-width: 640px) {
-      .footer-bottom-bar {
-        flex-direction: row;
-      }
+      .footer-bottom-bar { flex-direction: row; }
     }
   </style>
 </head>
 
-<body>
+<body class="locked">
+  <!-- Subtle Grid Mesh -->
+  <div class="bg-grid-mesh"></div>
+
   <!-- ==========================================================================
-       HEADER & NAVIGATION
+       LUXURY 0-100% PRELOADER
+       ========================================================================== -->
+  <div class="luxury-preloader" id="luxuryPreloader">
+    <div class="preloader-glow-orb"></div>
+    <div class="preloader-box">
+      <div class="preloader-logo-ring">
+        <div class="preloader-logo-inner">
+          <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:24px'}))">
+        </div>
+      </div>
+
+      <div class="preloader-counter-wrap">
+        <span id="preloaderNum">0</span><span class="preloader-symbol">%</span>
+      </div>
+
+      <div class="preloader-bar-bg">
+        <div class="preloader-bar-fill" id="preloaderBar"></div>
+      </div>
+
+      <div class="preloader-status-text">INITIALIZING DIGITAL CRAFT // SRP.DEV</div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION (SRP.dev WITH ANIMATED DEV CHIP)
        ========================================================================== -->
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <div class="brand-group">
-        <a href="#home" class="brand-logo" aria-label="ApproX Coding Home">
+        <a href="#home" class="brand-logo" aria-label="SRP.dev Home">
           <div class="brand-logo-img">
-            <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S'}))">
+            <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:16px'}))">
           </div>
-          <div class="brand-logo-text">ApproX <span>Coding</span></div>
+          <div class="brand-text">
+            <span class="brand-srp">SRP</span><span class="brand-dev-chip"><span class="dev-scramble" data-scramble="dev">dev</span><span class="brand-caret"></span></span>
+          </div>
         </a>
 
         <nav class="nav-menu">
           <a href="#services" class="nav-item">
             Services
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </a>
-          <a href="#solutions" class="nav-item">
-            Solutions
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
           <a href="#lab" class="nav-item">
@@ -1620,6 +1831,10 @@
           </a>
           <a href="#pricing" class="nav-item">
             Pricing
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </a>
+          <a href="#faq" class="nav-item">
+            FAQ
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
         </nav>
@@ -1642,7 +1857,6 @@
   <!-- Mobile Dropdown Menu -->
   <div class="mobile-nav-drawer" id="mobileNavDrawer">
     <a href="#services">Services</a>
-    <a href="#solutions">Solutions</a>
     <a href="#lab">3D WebGL Lab</a>
     <a href="#process">Process</a>
     <a href="#pricing">Pricing</a>
@@ -1652,10 +1866,9 @@
 
   <main>
     <!-- ==========================================================================
-         SECTION 1: VIDEO HERO (ApproX Exact Hero)
+         SECTION 1: VIDEO HERO (ApproX Exact Hero Layout)
          ========================================================================== -->
     <section class="hero-section" id="home">
-      <!-- Background Video with Fallback -->
       <div class="hero-video-wrap">
         <video autoplay loop muted playsinline>
           <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260217_030345_246c0224-10a4-422c-b324-070b7c0eceda.mp4" type="video/mp4" />
@@ -1666,21 +1879,21 @@
 
       <div class="hero-content">
         <!-- Live Status Pill -->
-        <div class="hero-badge">
+        <div class="hero-badge reveal">
           <div class="hero-pulse-dot"></div>
-          <span style="color:rgba(255,255,255,0.65);">Web Development for Businesses</span>
-          <span style="color:#ffffff;font-weight:600;">Design &bull; Development &bull; Support</span>
+          <span style="color:rgba(255,255,255,0.65);">SRP.dev &bull; Web Development</span>
+          <span style="color:#ffffff;font-weight:600;">Design &bull; Development &bull; 3D</span>
         </div>
 
-        <h1 class="hero-title">
+        <h1 class="hero-title reveal reveal-delay-1">
           Websites and Web Apps Built for Your Business.
         </h1>
 
-        <p class="hero-desc">
+        <p class="hero-desc reveal reveal-delay-2">
           I build business websites, eCommerce stores, investment platforms, appointment booking systems, and custom web applications &mdash; designed around your goals and built to work smoothly on every screen.
         </p>
 
-        <div class="hero-cta-group">
+        <div class="hero-cta-group reveal reveal-delay-3">
           <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-discuss-project">
             <div class="btn-sheen"></div>
             <div class="btn-discuss-inner">
@@ -1703,7 +1916,6 @@
       <p class="story-tag-header">What I Build</p>
 
       <div class="story-track">
-        <!-- Sequence -->
         <span class="story-item">Websites</span>
         <span class="story-item">
           <svg width="48" height="22" viewBox="0 0 100 24" fill="none">
@@ -1731,7 +1943,7 @@
         <span class="story-item light">Frontend &amp; Backend</span>
         <span class="story-item grad">Built to grow</span>
 
-        <!-- Duplicated for continuous loop -->
+        <!-- Loop duplication -->
         <span class="story-item">Websites</span>
         <span class="story-item">
           <svg width="48" height="22" viewBox="0 0 100 24" fill="none">
@@ -1766,7 +1978,7 @@
          ========================================================================== -->
     <section class="metrics-section">
       <div class="container">
-        <div class="metrics-header">
+        <div class="metrics-header reveal">
           <div>
             <div class="metrics-eyebrow">
               <span class="metrics-eyebrow-line"></span>
@@ -1781,7 +1993,7 @@
 
         <div class="metrics-grid">
           <!-- Card 1 -->
-          <div class="metric-card">
+          <div class="metric-card reveal reveal-delay-1">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 01</span>
               <span class="metric-dot"></span>
@@ -1793,7 +2005,7 @@
           </div>
 
           <!-- Card 2 -->
-          <div class="metric-card">
+          <div class="metric-card reveal reveal-delay-2">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 02</span>
               <span class="metric-dot"></span>
@@ -1805,7 +2017,7 @@
           </div>
 
           <!-- Card 3 -->
-          <div class="metric-card">
+          <div class="metric-card reveal reveal-delay-3">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 03</span>
               <span class="metric-dot"></span>
@@ -1817,7 +2029,7 @@
           </div>
 
           <!-- Card 4 -->
-          <div class="metric-card">
+          <div class="metric-card reveal reveal-delay-4">
             <div class="metric-card-top">
               <span class="metric-card-tag">Metric 04</span>
               <span class="metric-dot"></span>
@@ -1836,14 +2048,14 @@
          ========================================================================== -->
     <section class="services-section" id="services">
       <div class="container">
-        <div class="section-center-head">
+        <div class="section-center-head reveal">
           <h2 class="section-heading-lg">What We Build</h2>
           <p class="section-subheading">From simple landing pages to advanced custom web applications, here are the core web development services I provide.</p>
         </div>
 
         <div class="services-grid">
           <!-- Service 1 -->
-          <div class="service-card">
+          <div class="service-card reveal reveal-delay-1">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             </div>
@@ -1856,7 +2068,7 @@
           </div>
 
           <!-- Service 2 -->
-          <div class="service-card">
+          <div class="service-card reveal reveal-delay-2">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
@@ -1869,7 +2081,7 @@
           </div>
 
           <!-- Service 3 -->
-          <div class="service-card">
+          <div class="service-card reveal reveal-delay-3">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
@@ -1882,7 +2094,7 @@
           </div>
 
           <!-- Service 4 -->
-          <div class="service-card">
+          <div class="service-card reveal reveal-delay-1">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
@@ -1895,7 +2107,7 @@
           </div>
 
           <!-- Service 5 -->
-          <div class="service-card">
+          <div class="service-card reveal reveal-delay-2">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
@@ -1908,7 +2120,7 @@
           </div>
 
           <!-- Service 6 -->
-          <div class="service-card">
+          <div class="service-card reveal reveal-delay-3">
             <div class="service-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             </div>
@@ -1924,20 +2136,22 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 5: 3D WEBGL LAB
+         SECTION 5: 3D WEBGL LAB (RESPONSIVE & MOBILE-ADAPTIVE)
          ========================================================================== -->
     <section class="lab-section" id="lab">
       <div class="container">
-        <div class="section-center-head">
+        <div class="section-center-head reveal">
           <h2 class="section-heading-lg">Interactive 3D WebGL Lab</h2>
-          <p class="section-subheading">Hardware-accelerated 3D graphics rendered live on the GPU. Drag to interact with geometries in 3D space.</p>
+          <p class="section-subheading">Hardware-accelerated 3D graphics rendered live on the GPU. Drag to interact with geometries in 3D space on both mobile and desktop.</p>
         </div>
 
-        <div class="lab-canvas-container" id="webglBox">
+        <div class="lab-canvas-container reveal" id="webglBox">
           <div class="lab-top-tag">
             <span class="hero-pulse-dot"></span>
             <span>THREE.JS · WEBGL 60 FPS</span>
           </div>
+
+          <div class="lab-hint">Drag cursor / touch to rotate geometry</div>
 
           <div class="lab-model-selector" id="modelControls">
             <button class="lab-btn active" data-model="0">Torus Knot</button>
@@ -1949,34 +2163,34 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 6: WHY CHOOSE APPROX CODING (6 Horizontal Connected Cards)
+         SECTION 6: WHY CHOOSE SRP.dev (6 Horizontal Connected Cards)
          ========================================================================== -->
     <section class="why-choose-section">
       <div class="container">
-        <div class="section-center-head">
-          <h2 class="section-heading-lg">Why Choose<br/>ApproX Coding?</h2>
+        <div class="section-center-head reveal">
+          <h2 class="section-heading-lg">Why Choose<br/>SRP.dev?</h2>
         </div>
 
         <div class="why-cards-track">
           <div class="why-line-bg"></div>
 
           <div class="why-grid">
-            <div class="why-card">
+            <div class="why-card reveal reveal-delay-1">
               <span class="why-card-text">Built Around Your Business Needs</span>
             </div>
-            <div class="why-card">
+            <div class="why-card reveal reveal-delay-2">
               <span class="why-card-text">E-commerce &amp; Online Store Solutions</span>
             </div>
-            <div class="why-card">
+            <div class="why-card reveal reveal-delay-3">
               <span class="why-card-text">Smooth, Responsive, High-Performance Experience</span>
             </div>
-            <div class="why-card">
+            <div class="why-card reveal reveal-delay-1">
               <span class="why-card-text">Modern Technologies (React, Next.js, Node.js)</span>
             </div>
-            <div class="why-card">
+            <div class="why-card reveal reveal-delay-2">
               <span class="why-card-text">SEO-Friendly &amp; Conversion-Focused Structure</span>
             </div>
-            <div class="why-card">
+            <div class="why-card reveal reveal-delay-3">
               <span class="why-card-text">Reliable Delivery &amp; Ongoing Support</span>
             </div>
           </div>
@@ -1985,11 +2199,11 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 7: FROM IDEA TO LAUNCH (Vertical Center Timeline)
-         ========================================================================== -->
+       SECTION 7: FROM IDEA TO LAUNCH (Vertical Center Timeline)
+       ========================================================================== -->
     <section class="process-section" id="process">
       <div class="container">
-        <div class="section-center-head">
+        <div class="section-center-head reveal">
           <h2 class="section-heading-lg">From Idea to Launch</h2>
           <p class="section-subheading">A clear development process to turn your business requirements into a functional, user-friendly website.</p>
         </div>
@@ -1998,7 +2212,7 @@
           <div class="timeline-center-line"></div>
 
           <!-- Phase 01 -->
-          <div class="timeline-item">
+          <div class="timeline-item reveal">
             <div class="timeline-badge">
               <div class="timeline-badge-inner">01</div>
             </div>
@@ -2011,7 +2225,7 @@
           </div>
 
           <!-- Phase 02 -->
-          <div class="timeline-item">
+          <div class="timeline-item reveal">
             <div class="timeline-badge">
               <div class="timeline-badge-inner">02</div>
             </div>
@@ -2024,7 +2238,7 @@
           </div>
 
           <!-- Phase 03 -->
-          <div class="timeline-item">
+          <div class="timeline-item reveal">
             <div class="timeline-badge">
               <div class="timeline-badge-inner">03</div>
             </div>
@@ -2037,7 +2251,7 @@
           </div>
 
           <!-- Phase 04 -->
-          <div class="timeline-item">
+          <div class="timeline-item reveal">
             <div class="timeline-badge">
               <div class="timeline-badge-inner">04</div>
             </div>
@@ -2053,32 +2267,32 @@
     </section>
 
     <!-- ==========================================================================
-         SECTION 8: PRICING (ApproX Pricing with Currency Switcher)
-         ========================================================================== -->
+       SECTION 8: PRICING (ApproX Pricing with Currency Switcher)
+       ========================================================================== -->
     <section class="pricing-section" id="pricing">
       <div class="container">
-        <div class="section-center-head">
+        <div class="section-center-head reveal">
           <h2 class="section-heading-lg">Simple Pricing. Real Solutions.</h2>
           <p class="section-subheading">Choose a plan that fits your business. From professional websites to complete e-commerce stores and custom web applications.</p>
         </div>
 
         <!-- Currency Selector -->
-        <div class="currency-switch-box">
-          <label for="currencySelect">Choose your currency</label>
+        <div class="currency-switch-box reveal">
+          <label for="currencySelect">Choose your currency:</label>
           <select id="currencySelect" class="currency-dropdown" aria-label="Choose pricing currency">
-            <option value="PKR" selected>PKR &mdash; Pakistani Rupee</option>
-            <option value="USD">USD &mdash; US Dollar</option>
-            <option value="BDT">BDT &mdash; Bangladeshi Taka</option>
-            <option value="INR">INR &mdash; Indian Rupee</option>
+            <option value="BDT" selected>BDT (৳) &mdash; Bangladeshi Taka</option>
+            <option value="USD">USD ($) &mdash; US Dollar</option>
+            <option value="PKR">PKR (Rs.) &mdash; Pakistani Rupee</option>
+            <option value="INR">INR (₹) &mdash; Indian Rupee</option>
           </select>
         </div>
 
         <div class="pricing-grid">
           <!-- Plan 1 -->
-          <div class="pricing-tier-card">
+          <div class="pricing-tier-card reveal reveal-delay-1">
             <h3 class="pricing-tier-h3">Starter Website</h3>
             <p class="pricing-tier-tagline">For individuals and small businesses</p>
-            <div class="pricing-tier-price" id="priceTier1" data-pkr="Rs. 25,000" data-usd="$120" data-bdt="৳ 15,000" data-inr="₹ 10,000">Rs. 25,000</div>
+            <div class="pricing-tier-price" id="priceTier1" data-bdt="৳ 15,000" data-usd="$120" data-pkr="Rs. 25,000" data-inr="₹ 10,000">৳ 15,000</div>
             <p class="pricing-tier-subtext">Starting price &bull; One-time project</p>
 
             <ul class="pricing-list">
@@ -2104,16 +2318,16 @@
               </li>
             </ul>
 
-            <a href="https://wa.me/8801852093429?text=Hi%20ApproX%20Coding%2C%20I%20am%20interested%20in%20the%20Starter%20Website%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark">
+            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20am%20interested%20in%20the%20Starter%20Website%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark">
               Get Started
             </a>
           </div>
 
           <!-- Plan 2 (Featured) -->
-          <div class="pricing-tier-card featured">
+          <div class="pricing-tier-card featured reveal reveal-delay-2">
             <h3 class="pricing-tier-h3">Business Growth</h3>
             <p class="pricing-tier-tagline">For growing brands and eCommerce</p>
-            <div class="pricing-tier-price" id="priceTier2" data-pkr="Rs. 55,000" data-usd="$250" data-bdt="৳ 32,000" data-inr="₹ 22,000">Rs. 55,000</div>
+            <div class="pricing-tier-price" id="priceTier2" data-bdt="৳ 32,000" data-usd="$250" data-pkr="Rs. 55,000" data-inr="₹ 22,000">৳ 32,000</div>
             <p class="pricing-tier-subtext">Starting price &bull; One-time project</p>
 
             <ul class="pricing-list">
@@ -2143,16 +2357,16 @@
               </li>
             </ul>
 
-            <a href="https://wa.me/8801852093429?text=Hi%20ApproX%20Coding%2C%20I%20am%20interested%20in%20the%20Business%20Growth%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn white">
+            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20am%20interested%20in%20the%20Business%20Growth%20plan." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn white">
               Get Started
             </a>
           </div>
 
           <!-- Plan 3 -->
-          <div class="pricing-tier-card">
+          <div class="pricing-tier-card reveal reveal-delay-3">
             <h3 class="pricing-tier-h3">Custom Web Solution</h3>
             <p class="pricing-tier-tagline">For specialized business applications</p>
-            <div class="pricing-tier-price" id="priceTier3" data-pkr="Rs. 95,000+" data-usd="$450+" data-bdt="৳ 55,000+" data-inr="₹ 38,000+">Rs. 95,000+</div>
+            <div class="pricing-tier-price" id="priceTier3" data-bdt="৳ 55,000+" data-usd="$450+" data-pkr="Rs. 95,000+" data-inr="₹ 38,000+">৳ 55,000+</div>
             <p class="pricing-tier-subtext">Custom quote based on scope</p>
 
             <ul class="pricing-list">
@@ -2182,7 +2396,7 @@
               </li>
             </ul>
 
-            <a href="https://wa.me/8801852093429?text=Hi%20ApproX%20Coding%2C%20I%20need%20a%20Custom%20Web%20Solution." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark">
+            <a href="https://wa.me/8801852093429?text=Hi%20SRP.dev%2C%20I%20need%20a%20Custom%20Web%20Solution." target="_blank" rel="noopener noreferrer" class="pricing-tier-btn dark">
               Contact for Quote
             </a>
           </div>
@@ -2195,13 +2409,12 @@
          ========================================================================== -->
     <section class="faq-section" id="faq">
       <div class="container">
-        <div class="section-center-head">
+        <div class="section-center-head reveal">
           <h2 class="section-heading-lg">Questions?<br/>We&rsquo;ve Got Answers</h2>
         </div>
 
         <div class="faq-container">
-          <!-- FAQ 1 -->
-          <div class="faq-box">
+          <div class="faq-box reveal">
             <button class="faq-q-btn">
               <span class="faq-q-text">Do I need to provide hosting and a domain?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -2211,8 +2424,7 @@
             </div>
           </div>
 
-          <!-- FAQ 2 -->
-          <div class="faq-box">
+          <div class="faq-box reveal">
             <button class="faq-q-btn">
               <span class="faq-q-text">How long does it take to build a website?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -2222,19 +2434,17 @@
             </div>
           </div>
 
-          <!-- FAQ 3 -->
-          <div class="faq-box">
+          <div class="faq-box reveal">
             <button class="faq-q-btn">
               <span class="faq-q-text">Can you add online payments to my store?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <div class="faq-a-wrap">
-              <p class="faq-a-text">Yes! I integrate international payment gateways like Stripe and PayPal, as well as local gateways such as bKash, SSLCommerz, Easypaisa, and JazzCash with secure checkout flows.</p>
+              <p class="faq-a-text">Yes! I integrate international payment gateways like Stripe and PayPal, as well as local gateways such as bKash, SSLCommerz, Nagad, and bank transfers with secure checkout flows.</p>
             </div>
           </div>
 
-          <!-- FAQ 4 -->
-          <div class="faq-box">
+          <div class="faq-box reveal">
             <button class="faq-q-btn">
               <span class="faq-q-text">Will my website be mobile-friendly?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -2244,8 +2454,7 @@
             </div>
           </div>
 
-          <!-- FAQ 5 -->
-          <div class="faq-box">
+          <div class="faq-box reveal">
             <button class="faq-q-btn">
               <span class="faq-q-text">Do you provide support after the website is launched?</span>
               <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -2264,7 +2473,7 @@
     <section class="cta-final-section">
       <div class="cta-ambient-glow"></div>
 
-      <div class="container" style="position:relative;z-index:2;">
+      <div class="container reveal" style="position:relative;z-index:2;">
         <h2 class="cta-heading">Ready to Build Your Next Website?</h2>
         <p class="cta-subtext">Whether you need a new business website, an eCommerce store, or a custom web app &mdash; let&rsquo;s make it happen.</p>
 
@@ -2285,25 +2494,25 @@
   </main>
 
   <!-- ==========================================================================
-       FOOTER (ApproX Exact Footer)
+       FOOTER
        ========================================================================== -->
   <footer id="contact">
     <div class="container">
       <div class="footer-grid">
-        <!-- Col 1 -->
         <div>
-          <a href="#home" class="brand-logo" aria-label="ApproX Coding Home">
+          <a href="#home" class="brand-logo" aria-label="SRP.dev Home">
             <div class="brand-logo-img">
-              <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S'}))">
+              <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:16px'}))">
             </div>
-            <div class="brand-logo-text">ApproX <span>Coding</span></div>
+            <div class="brand-text">
+              <span class="brand-srp">SRP</span><span class="brand-dev-chip">dev<span class="brand-caret"></span></span>
+            </div>
           </a>
           <p class="footer-brand-p">
             Web development and digital solutions tailored to your business goals. Fast, responsive, and built to scale.
           </p>
         </div>
 
-        <!-- Col 2 -->
         <div>
           <h4 class="footer-h4">Explore</h4>
           <ul class="footer-links-list">
@@ -2315,12 +2524,11 @@
           </ul>
         </div>
 
-        <!-- Col 3 -->
         <div>
           <h4 class="footer-h4">Get in Touch</h4>
           <ul class="footer-links-list">
             <li>
-              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" style="color:var(--accent-electric);font-weight:500;">
+              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" style="color:var(--accent-electric);font-weight:600;">
                 WhatsApp: +880 1852-093429
               </a>
             </li>
@@ -2329,7 +2537,6 @@
           </ul>
         </div>
 
-        <!-- Col 4 -->
         <div>
           <h4 class="footer-h4">Connect</h4>
           <ul class="footer-links-list">
@@ -2340,20 +2547,116 @@
       </div>
 
       <div class="footer-bottom-bar">
-        <div>&copy; 2026 ApproX Coding / SRP.dev. All rights reserved.</div>
+        <div>&copy; 2026 <b>SRP.dev</b>. All rights reserved.</div>
         <div>Built for performance &amp; high conversions.</div>
       </div>
     </div>
   </footer>
 
   <!-- ==========================================================================
-       SCRIPTS: THREE.JS LAB, CURRENCY SWITCHER, ACCORDION, INTERSECTIONS
+       SCRIPTS: PRELOADER, SCRAMBLE, 3D MOBILE FIX, REVEALS, CURRENCY
        ========================================================================== -->
   <script>
     (function() {
       'use strict';
 
-      /* --- 1. Sticky Nav --- */
+      /* --- 1. Luxury 0 - 100% Preloader with Smooth Page Unlock --- */
+      const preloader = document.getElementById('luxuryPreloader');
+      const preloaderNum = document.getElementById('preloaderNum');
+      const preloaderBar = document.getElementById('preloaderBar');
+
+      let currentPercent = 0;
+      const targetPercent = 100;
+      const duration = 1350; // ms
+      const intervalTime = 25;
+      const step = targetPercent / (duration / intervalTime);
+
+      const preloaderTimer = setInterval(function() {
+        currentPercent += step + (Math.random() * 2);
+        if (currentPercent >= targetPercent) {
+          currentPercent = 100;
+          preloaderNum.textContent = '100';
+          preloaderBar.style.width = '100%';
+          clearInterval(preloaderTimer);
+
+          setTimeout(function() {
+            preloader.classList.add('done');
+            document.body.classList.remove('locked');
+            triggerScrollReveals();
+          }, 320);
+        } else {
+          const val = Math.floor(currentPercent);
+          preloaderNum.textContent = val;
+          preloaderBar.style.width = val + '%';
+        }
+      }, intervalTime);
+
+      /* --- 2. Animated Code Scramble for .dev --- */
+      const scrambleEls = document.querySelectorAll('.dev-scramble');
+      const GLYPHS = '!<>-_\\/[]{}=+*^?#________';
+
+      function runScramble(el) {
+        const finalWord = el.getAttribute('data-scramble') || 'dev';
+        const len = finalWord.length;
+        let frame = 0;
+        const totalFrames = 18;
+
+        const interval = setInterval(function() {
+          frame++;
+          let text = '';
+          const progress = frame / totalFrames;
+
+          for (let i = 0; i < len; i++) {
+            if (i / len < progress * 1.3) {
+              text += finalWord[i];
+            } else {
+              text += GLYPHS.charAt(Math.floor(Math.random() * GLYPHS.length));
+            }
+          }
+          el.textContent = text;
+
+          if (frame >= totalFrames) {
+            el.textContent = finalWord;
+            clearInterval(interval);
+          }
+        }, 45);
+      }
+
+      // Initial scramble on load
+      setTimeout(function() {
+        scrambleEls.forEach(runScramble);
+      }, 1500);
+
+      // Periodic re-scramble every 5.5s
+      setInterval(function() {
+        scrambleEls.forEach(runScramble);
+      }, 5500);
+
+      // Scramble on hover
+      document.querySelectorAll('.brand-logo').forEach(function(logo) {
+        logo.addEventListener('mouseenter', function() {
+          scrambleEls.forEach(runScramble);
+        });
+      });
+
+      /* --- 3. Scroll Reveal System --- */
+      function triggerScrollReveals() {
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              revealObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        reveals.forEach(function(el) {
+          revealObs.observe(el);
+        });
+      }
+
+      /* --- 4. Sticky Header --- */
       const header = document.getElementById('siteHeader');
       window.addEventListener('scroll', function() {
         if (window.scrollY > 40) {
@@ -2363,7 +2666,7 @@
         }
       }, { passive: true });
 
-      /* --- 2. Mobile Menu Drawer --- */
+      /* --- 5. Mobile Drawer --- */
       const menuBtn = document.getElementById('menuToggleBtn');
       const drawer = document.getElementById('mobileNavDrawer');
       if (menuBtn && drawer) {
@@ -2383,7 +2686,7 @@
         });
       }
 
-      /* --- 3. Animated Number Counters --- */
+      /* --- 6. Number Counter Animation --- */
       const counters = document.querySelectorAll('.counter');
       const counterObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -2391,9 +2694,9 @@
             const el = entry.target;
             const target = +el.getAttribute('data-target');
             let count = 0;
-            const step = Math.max(1, Math.floor(target / 40));
+            const stepVal = Math.max(1, Math.floor(target / 40));
             const timer = setInterval(function() {
-              count += step;
+              count += stepVal;
               if (count >= target) {
                 el.textContent = target;
                 clearInterval(timer);
@@ -2407,8 +2710,8 @@
       }, { threshold: 0.2 });
       counters.forEach(function(c) { counterObs.observe(c); });
 
-      /* --- 4. Interactive 3D WebGL Lab --- */
-      function initLab() {
+      /* --- 7. Interactive 3D WebGL Lab with Mobile Fix --- */
+      function init3DLab() {
         const wrap = document.getElementById('webglBox');
         if (!wrap || !window.THREE) return;
 
@@ -2424,59 +2727,81 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-        camera.position.set(0, 0, 7);
 
         const group = new THREE.Group();
         scene.add(group);
 
-        const matA = new THREE.MeshBasicMaterial({ color: 0x4EA3E0, wireframe: true, transparent: true, opacity: 0.65 });
-        const matB = new THREE.MeshBasicMaterial({ color: 0xa855f7, wireframe: true, transparent: true, opacity: 0.45 });
+        const matCyan = new THREE.MeshBasicMaterial({ color: 0x4EA3E0, wireframe: true, transparent: true, opacity: 0.65 });
+        const matPurple = new THREE.MeshBasicMaterial({ color: 0xa855f7, wireframe: true, transparent: true, opacity: 0.45 });
 
-        // Models
-        const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.4, 0.36, 120, 22), matA);
+        // Model 0: Torus Knot
+        const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.35, 0.35, 120, 22), matCyan);
 
+        // Model 1: Crystal Core
         const crystal = new THREE.Group();
-        crystal.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 0), matA));
-        crystal.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.35, 1), matB));
+        crystal.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.75, 0), matCyan));
+        crystal.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.3, 1), matPurple));
 
+        // Model 2: Cyber Orbit
         const orbit = new THREE.Group();
-        const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.025, 8, 120), matA);
-        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.025, 8, 100), matB);
-        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.35, 24, 24), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 }));
-        ring1.rotation.x = Math.PI / 2.3;
-        ring2.rotation.y = Math.PI / 2.6;
-        orbit.add(ring1, ring2, sphere);
+        const r1 = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.025, 8, 120), matCyan);
+        const r2 = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.025, 8, 100), matPurple);
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 24), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 }));
+        r1.rotation.x = Math.PI / 2.3;
+        r2.rotation.y = Math.PI / 2.6;
+        orbit.add(r1, r2, sphere);
 
         const models = [knot, crystal, orbit];
         models[1].visible = false;
         models[2].visible = false;
         models.forEach(function(m) { group.add(m); });
 
-        // Particles
-        const count = 400;
-        const pos = new Float32Array(count * 3);
-        for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 16;
+        // Space Particle Dust
+        const particleCount = 380;
+        const pos = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i++) {
+          pos[i] = (Math.random() - 0.5) * 16;
+        }
         const geo = new THREE.BufferGeometry();
         geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x4EA3E0, size: 0.045, transparent: true, opacity: 0.4 })));
+        const particleMesh = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x4EA3E0, size: 0.045, transparent: true, opacity: 0.4 }));
+        scene.add(particleMesh);
 
-        function resize() {
-          const w = wrap.clientWidth || 600, h = wrap.clientHeight || 450;
-          renderer.setSize(w, h, false);
+        // Responsive Camera & Scale calculation
+        function updateSize() {
+          const w = wrap.clientWidth || 360;
+          const h = wrap.clientHeight || 380;
           camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-        }
-        resize();
-        window.addEventListener('resize', resize, { passive: true });
 
-        // Drag
-        let isDragging = false, lastX = 0, lastY = 0, rotX = 0, rotY = 0, targetX = 0, targetY = 0;
+          // Camera distance dynamically adjusts so models are NEVER clipped on mobile
+          if (camera.aspect < 1) {
+            camera.position.set(0, 0, Math.max(7.2, 5.8 / camera.aspect));
+            group.scale.set(0.85, 0.85, 0.85);
+          } else {
+            camera.position.set(0, 0, 6.8);
+            group.scale.set(1.0, 1.0, 1.0);
+          }
+
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h, false);
+        }
+
+        updateSize();
+        window.addEventListener('resize', updateSize, { passive: true });
+
+        // Touch & Drag controls with smooth inertia
+        let isDragging = false;
+        let lastX = 0, lastY = 0;
+        let rotX = 0, rotY = 0;
+        let targetX = 0, targetY = 0;
+
         wrap.addEventListener('pointerdown', function(e) {
           isDragging = true;
           lastX = e.clientX;
           lastY = e.clientY;
           if (wrap.setPointerCapture) wrap.setPointerCapture(e.pointerId);
         });
+
         wrap.addEventListener('pointermove', function(e) {
           if (!isDragging) return;
           targetY += (e.clientX - lastX) * 0.007;
@@ -2484,49 +2809,65 @@
           lastX = e.clientX;
           lastY = e.clientY;
         }, { passive: true });
-        function stop() { isDragging = false; }
-        wrap.addEventListener('pointerup', stop);
-        wrap.addEventListener('pointercancel', stop);
 
-        // Buttons
+        function stopDrag() { isDragging = false; }
+        wrap.addEventListener('pointerup', stopDrag);
+        wrap.addEventListener('pointercancel', stopDrag);
+
+        // Model Switcher Buttons
         const btns = document.querySelectorAll('#modelControls button');
         btns.forEach(function(btn) {
           btn.addEventListener('click', function() {
             const idx = +btn.getAttribute('data-model');
             btns.forEach(function(b) { b.classList.toggle('active', b === btn); });
             models.forEach(function(m, i) { m.visible = (i === idx); });
-            targetX = targetY = 0;
+            targetX = 0;
+            targetY = 0;
           });
         });
 
+        // Auto pause off-screen to preserve battery
         let isVis = true;
-        new IntersectionObserver(function(es) { es.forEach(function(e) { isVis = e.isIntersecting; }); }, { threshold: 0.05 }).observe(wrap);
+        new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) { isVis = e.isIntersecting; });
+        }, { threshold: 0.05 }).observe(wrap);
 
         let t = 0;
-        function anim() {
-          requestAnimationFrame(anim);
+        function renderLoop() {
+          requestAnimationFrame(renderLoop);
           if (!isVis) return;
           t += 0.015;
+
           if (!isDragging) {
-            targetY += 0.003;
+            targetY += 0.0032;
             targetX += Math.sin(t * 0.4) * 0.001;
           }
+
           rotX += (targetX - rotX) * 0.08;
           rotY += (targetY - rotY) * 0.08;
+
           group.rotation.x = rotX;
           group.rotation.y = rotY;
+
           knot.rotation.z = t * 0.2;
           crystal.rotation.y = t * 0.4;
           orbit.rotation.z = t * 0.35;
+          particleMesh.rotation.y = t * 0.03;
+
           renderer.render(scene, camera);
         }
-        anim();
+        renderLoop();
       }
 
-      if (window.THREE) initLab();
-      else window.addEventListener('load', function() { if (window.THREE) initLab(); });
+      if (window.THREE) {
+        init3DLab();
+      } else {
+        window.addEventListener('load', function() {
+          if (window.THREE) init3DLab();
+        });
+      }
 
-      /* --- 5. Currency Converter --- */
+      /* --- 8. Dynamic Currency Converter --- */
       const currSelect = document.getElementById('currencySelect');
       if (currSelect) {
         currSelect.addEventListener('change', function() {
@@ -2541,7 +2882,7 @@
         });
       }
 
-      /* --- 6. FAQ Accordion --- */
+      /* --- 9. FAQ Accordion --- */
       const faqBoxes = document.querySelectorAll('.faq-box');
       faqBoxes.forEach(function(box) {
         const btn = box.querySelector('.faq-q-btn');
