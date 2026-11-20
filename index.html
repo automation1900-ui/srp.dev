@@ -332,47 +332,94 @@
     .reveal-delay-4 { transition-delay: 0.32s; }
 
     /* ==========================================================================
-       HEADER & NAVIGATION (SRP.dev WITH CODING ANIMATED BADGE)
+       CUBERTO DYNAMIC ISLAND NAVBAR, 3-MENU HOVER ROLL-UP & MORPHING MENU
        ========================================================================== */
-    .site-header {
+    .cuberto-navbar {
       position: fixed;
-      top: 0;
+      top: 20px;
       left: 0;
       right: 0;
-      z-index: 100;
-      padding: 22px 24px;
-      transition: all 0.4s var(--ease);
-      border-bottom: 1px solid transparent;
-      background: transparent;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @media (min-width: 768px) {
-      .site-header { padding: 18px 48px; }
-    }
-    @media (min-width: 1200px) {
-      .site-header { padding: 18px 120px; }
+    .island-strip {
+      pointer-events: auto;
+      width: calc(100% - 48px);
+      max-width: 1140px;
+      background: rgba(8, 8, 14, 0.76);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.2);
+      transition: max-width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  background 0.4s var(--ease),
+                  border-color 0.4s var(--ease),
+                  box-shadow 0.4s var(--ease);
+      position: relative;
     }
 
-    .site-header.scrolled {
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 12px;
-      padding-bottom: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+    /* Scrolled state: Dynamic island shrinks like Apple & Cuberto */
+    .cuberto-navbar.-scrolled .island-strip {
+      max-width: 860px;
+      background: rgba(5, 5, 8, 0.94);
+      border-color: rgba(78, 163, 224, 0.32);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.88), 0 0 28px rgba(78, 163, 224, 0.16);
     }
 
-    .header-inner {
+    /* Expanded Dynamic Island when menu is open */
+    .cuberto-navbar.-open {
+      top: 12px;
+    }
+
+    .cuberto-navbar.-open .island-strip {
+      max-width: 1020px !important;
+      border-radius: 28px !important;
+      background: rgba(6, 6, 11, 0.98) !important;
+      backdrop-filter: blur(36px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
+      border-color: rgba(78, 163, 224, 0.4) !important;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.96), 0 0 50px rgba(78, 163, 224, 0.22) !important;
+    }
+
+    .island-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 64px;
+      padding: 0 24px;
+      transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 50px;
+    .cuberto-navbar.-scrolled .island-bar {
+      height: 56px;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 767px) {
+      .cuberto-navbar {
+        top: 12px;
+      }
+      .island-strip {
+        width: calc(100% - 24px);
+        border-radius: 9999px;
+      }
+      .cuberto-navbar.-scrolled .island-strip {
+        width: calc(100% - 32px);
+      }
+      .cuberto-navbar.-open .island-strip {
+        width: calc(100% - 20px) !important;
+        border-radius: 24px !important;
+      }
+      .island-bar {
+        height: 58px;
+        padding: 0 16px;
+      }
     }
 
     /* SRP.dev Brand Logo & Scramble Badge */
@@ -385,7 +432,7 @@
       font-size: 20px;
       letter-spacing: -0.02em;
       color: #ffffff;
-      shrink: 0;
+      flex-shrink: 0;
       z-index: 50;
     }
 
@@ -459,129 +506,496 @@
       49%, 100% { opacity: 0; }
     }
 
-    .nav-menu {
+    /* Desktop Navigation with Signature Cuberto Roll-Up */
+    .cuberto-navs {
       display: none;
       align-items: center;
-      gap: 28px;
+      gap: 4px;
     }
 
-    @media (min-width: 768px) {
-      .nav-menu { display: flex; }
+    @media (min-width: 900px) {
+      .cuberto-navs { display: flex; }
     }
 
-    .nav-item {
-      display: flex;
+    .cuberto-nav-item {
+      position: relative;
+    }
+
+    /* Cuberto Signature Text Roll-Up Animation */
+    .nav__title {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      vertical-align: middle;
+      line-height: 1.25;
+    }
+
+    .nav__title span {
+      display: inline-block;
+      position: relative;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    .nav__title span::after {
+      content: attr(data-text);
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      color: var(--accent-electric);
+      transform: scale(0.96);
+      transition: transform 0.35s;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .cuberto-nav-link:hover .nav__title span,
+      .btn-cuberto-cta:hover .nav__title span,
+      .drawer-big-link:hover .nav__title span {
+        transform: translateY(-100%);
+      }
+      .cuberto-nav-link:hover .nav__title span::after,
+      .btn-cuberto-cta:hover .nav__title span::after,
+      .drawer-big-link:hover .nav__title span::after {
+        transform: scale(1);
+      }
+    }
+
+    .cuberto-nav-link {
+      position: relative;
+      display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      padding: 8px 14px;
       font-size: 14px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
-      padding: 8px 0;
-      transition: color 0.25s;
+      color: rgba(255, 255, 255, 0.85);
+      transition: color 0.3s;
+      border-radius: 9999px;
     }
 
-    .nav-item:hover, .nav-item.active {
+    .cuberto-nav-link:hover {
       color: #ffffff;
     }
 
-    .nav-item svg {
-      opacity: 0.7;
-      transition: transform 0.25s;
+    .cuberto-nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: 2px;
+      left: 14px;
+      right: 14px;
+      height: 1.5px;
+      background: var(--grad-electric);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .nav-item:hover svg {
-      transform: translateY(2px);
+    .cuberto-nav-link:hover::after,
+    .cuberto-nav-link.active::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* Rotating Arrow for Services */
+    .nav__arrow {
+      width: 10px;
+      height: 7px;
+      color: rgba(255, 255, 255, 0.5);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+    }
+
+    .cuberto-nav-item.-has-dropdown:hover .nav__arrow,
+    .cuberto-nav-link[aria-expanded="true"] .nav__arrow {
+      transform: rotate(180deg);
+      color: var(--accent-electric);
+    }
+
+    /* Floating Glass Dropdown for Services */
+    .cuberto-dropdown {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 320px;
+      background: rgba(10, 10, 16, 0.96);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.88), 0 0 30px rgba(78, 163, 224, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+
+    .cuberto-nav-item.-has-dropdown:hover .cuberto-dropdown {
       opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      transition-delay: 0s;
+      pointer-events: auto;
     }
 
-    .header-actions {
+    .cuberto-dropdown::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      height: 16px;
+    }
+
+    .dropdown-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .drop-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      transition: background 0.25s, transform 0.25s;
+    }
+
+    .drop-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateX(4px);
+    }
+
+    .drop-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-electric);
+      box-shadow: 0 0 8px var(--accent-electric);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .drop-txt strong {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .drop-txt small {
+      display: block;
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 2px;
+    }
+
+    /* Actions: CTA Button + 2-Line Morphing Toggle */
+    .island-actions {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .btn-pill-get-started {
+    .btn-cuberto-cta {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.8px;
+      padding: 8px 20px;
       border-radius: 9999px;
-      overflow: hidden;
-      background: var(--grad-electric);
-      box-shadow: 0 0 20px rgba(78, 163, 224, 0.3);
-      transition: all 0.25s;
-    }
-
-    .btn-pill-get-started:hover {
-      box-shadow: 0 0 28px rgba(78, 163, 224, 0.55);
-      transform: scale(1.02);
-    }
-
-    .btn-pill-inner {
-      position: relative;
       background: #000000;
-      border-radius: 9999px;
-      padding: 8px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
+      border: 1px solid rgba(78, 163, 224, 0.45);
+      box-shadow: 0 0 16px rgba(78, 163, 224, 0.25);
+      font-size: 13.5px;
       font-weight: 600;
       color: #ffffff;
       white-space: nowrap;
+      transition: all 0.3s;
+      overflow: hidden;
     }
 
-    .menu-toggle-btn {
-      display: flex;
-      color: #ffffff;
-      padding: 6px;
-      z-index: 110;
+    .btn-cuberto-cta:hover {
+      border-color: var(--accent-electric);
+      box-shadow: 0 0 25px rgba(78, 163, 224, 0.55);
+      transform: scale(1.03);
     }
 
-    @media (min-width: 768px) {
-      .menu-toggle-btn { display: none; }
+    @media (max-width: 640px) {
+      .btn-cuberto-cta { display: none; }
     }
 
-    .mobile-nav-drawer {
-      position: fixed;
-      top: 76px;
-      left: 16px;
-      right: 16px;
-      background: rgba(10, 10, 15, 0.98);
+    /* Cuberto 2-Line Morphing Toggle Button */
+    .cuberto-toggle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
-      border-radius: 20px;
-      padding: 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 120;
+      flex-shrink: 0;
+    }
+
+    .cuberto-toggle:hover {
+      background: rgba(78, 163, 224, 0.18);
+      border-color: rgba(78, 163, 224, 0.45);
+      box-shadow: 0 0 15px rgba(78, 163, 224, 0.3);
+    }
+
+    .toggle-line {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: top 0.2s 0.25s, transform 0.3s, background 0.3s;
+    }
+
+    .toggle-line.top-line {
+      top: calc(50% - 1px - 4px);
+    }
+
+    .toggle-line.bot-line {
+      top: calc(50% - 1px + 4px);
+    }
+
+    .cuberto-navbar.-open .toggle-line {
+      transition: none;
+    }
+
+    .cuberto-navbar.-open .toggle-line.top-line {
+      animation: 0.75s cb-btn_menu-open-top forwards;
+      top: calc(50% - 1px);
+      transform: rotate(45deg);
+      background: var(--accent-electric);
+    }
+
+    .cuberto-navbar.-open .toggle-line.bot-line {
+      animation: 0.75s cb-btn_menu-open-bottom forwards;
+      top: calc(50% - 1px);
+      transform: rotate(-45deg);
+      background: var(--accent-purple);
+    }
+
+    @keyframes cb-btn_menu-open-top {
+      0% { clip-path: inset(0%); top: calc(50% - 1px - 4px); transform: rotate(0); }
+      30% { clip-path: inset(0% 100% 0% 0%); top: calc(50% - 1px - 4px); transform: rotate(0); }
+      30.01% { clip-path: inset(0% 100% 0% 0%); top: calc(50% - 1px); transform: rotate(45deg); }
+      80%, 100% { clip-path: inset(0%); top: calc(50% - 1px); transform: rotate(45deg); }
+    }
+
+    @keyframes cb-btn_menu-open-bottom {
+      0% { clip-path: inset(0%); top: calc(50% - 1px + 4px); transform: rotate(0); }
+      50% { clip-path: inset(0% 0% 0% 100%); top: calc(50% - 1px + 4px); transform: rotate(0); }
+      50.1%, 55% { clip-path: inset(0% 0% 0% 100%); top: calc(50% - 1px); transform: rotate(-45deg); }
+      100% { clip-path: inset(0%); top: calc(50% - 1px); transform: rotate(-45deg); }
+    }
+
+    /* Dynamic Island Accordion Drawer & Big Links */
+    .island-menu-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cuberto-navbar.-open .island-menu-drawer {
+      grid-template-rows: 1fr;
+    }
+
+    .drawer-inner {
+      min-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.4s var(--ease), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0 24px;
+    }
+
+    .cuberto-navbar.-open .drawer-inner {
+      opacity: 1;
+      transform: translateY(0);
+      padding: 10px 24px 28px 24px;
+      transition-delay: 0.08s;
+    }
+
+    .drawer-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 10px 0 16px 0;
+    }
+
+    .drawer-links-grid {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-big-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      font-size: clamp(20px, 4.8vw, 32px);
+      font-weight: 700;
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+      color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s;
+    }
+
+    .drawer-big-link:last-child {
+      border-bottom: none;
+    }
+
+    .drawer-big-link .link-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .drawer-big-link .link-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-electric);
+      opacity: 0.65;
+      letter-spacing: 0.05em;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .drawer-big-link svg {
+      color: rgba(255, 255, 255, 0.3);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+    }
+
+    .drawer-big-link:hover {
+      color: #ffffff;
+      padding-left: 8px;
+    }
+
+    .drawer-big-link:hover .link-num {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .drawer-big-link:hover svg {
+      transform: translate(4px, -4px);
+      color: var(--accent-electric);
+    }
+
+    .drawer-footer-row {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      z-index: 999;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
-      opacity: 0;
-      transform: translateY(-10px) scale(0.98);
-      pointer-events: none;
-      transition: all 0.3s var(--ease);
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .mobile-nav-drawer.open {
-      opacity: 1;
-      transform: none;
-      pointer-events: auto;
+    @media (min-width: 640px) {
+      .drawer-footer-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
-    .mobile-nav-drawer a {
-      font-size: 16px;
-      font-weight: 500;
+    .drawer-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.1em;
+    }
+
+    .status-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: livePulse 2s infinite;
+    }
+
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .drawer-contact-direct {
+      font-size: 13px;
       color: rgba(255, 255, 255, 0.7);
-      padding: 10px 14px;
-      border-radius: 10px;
+      margin-top: 4px;
     }
 
-    .mobile-nav-drawer a:hover {
+    .drawer-contact-direct b {
+      color: var(--accent-electric);
+      font-weight: 600;
+    }
+
+    .drawer-socials-col {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .social-chip {
+      padding: 6px 14px;
+      border-radius: 9999px;
       background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.75);
+      transition: all 0.25s;
+    }
+
+    .social-chip:hover {
+      background: rgba(78, 163, 224, 0.18);
+      border-color: rgba(78, 163, 224, 0.4);
       color: #ffffff;
+    }
+
+    .drawer-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      background: var(--grad-electric);
+      color: #000000;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(78, 163, 224, 0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .drawer-cta-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 28px rgba(78, 163, 224, 0.65);
     }
 
     /* ==========================================================================
@@ -1987,11 +2401,13 @@
   </div>
 
   <!-- ==========================================================================
-       HEADER & NAVIGATION (SRP.dev WITH ANIMATED DEV CHIP)
+       CUBERTO DYNAMIC ISLAND NAVBAR, 3-MENU HOVER & MORPHING MENU
        ========================================================================== -->
-  <header class="site-header" id="siteHeader">
-    <div class="header-inner">
-      <div class="brand-group">
+  <header class="cuberto-navbar" id="siteHeader">
+    <div class="island-strip" id="islandStrip">
+      <!-- Primary Top Island Bar -->
+      <div class="island-bar">
+        <!-- Logo -->
         <a href="#home" class="brand-logo tactile-press" aria-label="SRP.dev Home">
           <div class="brand-logo-img">
             <img src="Srplogo.png" alt="SRP" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'S',style:'color:#4EA3E0;font-size:16px'}))">
@@ -2001,53 +2417,161 @@
           </div>
         </a>
 
-        <nav class="nav-menu">
-          <a href="#services" class="nav-item tactile-press">
-            Services
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </a>
-          <a href="#lab" class="nav-item tactile-press">
-            3D Lab
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </a>
-          <a href="#process" class="nav-item tactile-press">
-            Process
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </a>
-          <a href="#pricing" class="nav-item tactile-press">
-            Pricing
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </a>
-          <a href="#faq" class="nav-item tactile-press">
-            FAQ
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </a>
+        <!-- Desktop Navigation with Cuberto Roll-Up Hover & Services Dropdown -->
+        <nav class="cuberto-navs" id="desktopNavs">
+          <!-- 1. Services with animated arrow & floating glass dropdown -->
+          <div class="cuberto-nav-item -has-dropdown">
+            <a href="#services" class="cuberto-nav-link tactile-press" id="servicesToggleBtn" aria-expanded="false">
+              <span class="nav__title"><span data-text="Services">Services</span></span>
+              <svg class="nav__arrow" viewBox="0 0 32 19.28"><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="4" d="m1.5 1.4 14.63 15 14.37-15"/></svg>
+            </a>
+            <!-- Floating Glass Dropdown Card -->
+            <div class="cuberto-dropdown" id="servicesDropdown">
+              <div class="dropdown-inner">
+                <a href="#services" class="drop-item">
+                  <span class="drop-dot"></span>
+                  <div class="drop-txt">
+                    <strong>Custom Web Development</strong>
+                    <small>High-converting apps &amp; responsive sites</small>
+                  </div>
+                </a>
+                <a href="#lab" class="drop-item">
+                  <span class="drop-dot"></span>
+                  <div class="drop-txt">
+                    <strong>Interactive 3D &amp; WebGL</strong>
+                    <small>Three.js GPU-powered motion experiences</small>
+                  </div>
+                </a>
+                <a href="#services" class="drop-item">
+                  <span class="drop-dot"></span>
+                  <div class="drop-txt">
+                    <strong>Speed &amp; SEO Optimization</strong>
+                    <small>95+ Google PageSpeed &amp; Core Web Vitals</small>
+                  </div>
+                </a>
+                <a href="#services" class="drop-item">
+                  <span class="drop-dot"></span>
+                  <div class="drop-txt">
+                    <strong>UI/UX Bug Fixing &amp; Redesign</strong>
+                    <small>Turn outdated designs into modern luxury</small>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 3D Lab -->
+          <div class="cuberto-nav-item">
+            <a href="#lab" class="cuberto-nav-link tactile-press">
+              <span class="nav__title"><span data-text="3D Lab">3D Lab</span></span>
+            </a>
+          </div>
+
+          <!-- 3. Process -->
+          <div class="cuberto-nav-item">
+            <a href="#process" class="cuberto-nav-link tactile-press">
+              <span class="nav__title"><span data-text="Process">Process</span></span>
+            </a>
+          </div>
+
+          <!-- 4. Pricing -->
+          <div class="cuberto-nav-item">
+            <a href="#pricing" class="cuberto-nav-link tactile-press">
+              <span class="nav__title"><span data-text="Pricing">Pricing</span></span>
+            </a>
+          </div>
+
+          <!-- 5. FAQ -->
+          <div class="cuberto-nav-item">
+            <a href="#faq" class="cuberto-nav-link tactile-press">
+              <span class="nav__title"><span data-text="FAQ">FAQ</span></span>
+            </a>
+          </div>
         </nav>
+
+        <!-- Right Side Actions: CTA + 2-Line Morphing Toggle -->
+        <div class="island-actions">
+          <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-cuberto-cta tactile-press">
+            <span class="nav__title"><span data-text="Get Started">Get Started</span></span>
+          </a>
+
+          <!-- Cuberto 2-Line Morphing Toggle Button -->
+          <button class="cuberto-toggle tactile-press" id="menuToggleBtn" aria-label="Toggle Navigation Menu">
+            <span class="toggle-line top-line"></span>
+            <span class="toggle-line bot-line"></span>
+          </button>
+        </div>
       </div>
 
-      <div class="header-actions">
-        <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="btn-pill-get-started tactile-press">
-          <div class="btn-pill-inner">
-            <span>Get Started</span>
+      <!-- Morphing Dynamic Island Menu Accordion -->
+      <div class="island-menu-drawer" id="islandMenuDrawer">
+        <div class="drawer-inner">
+          <div class="drawer-header-tag">
+            <span class="hero-pulse-dot"></span>
+            <span>// NAVIGATION DIRECTORY</span>
           </div>
-        </a>
 
-        <button class="menu-toggle-btn tactile-press" id="menuToggleBtn" aria-label="Toggle menu">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
-        </button>
+          <div class="drawer-links-grid">
+            <a href="#services" class="drawer-big-link tactile-press">
+              <div class="link-left">
+                <span class="link-num">01</span>
+                <span class="nav__title"><span data-text="Services">Services</span></span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+            </a>
+            <a href="#lab" class="drawer-big-link tactile-press">
+              <div class="link-left">
+                <span class="link-num">02</span>
+                <span class="nav__title"><span data-text="3D WebGL Lab">3D WebGL Lab</span></span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+            </a>
+            <a href="#process" class="drawer-big-link tactile-press">
+              <div class="link-left">
+                <span class="link-num">03</span>
+                <span class="nav__title"><span data-text="Process &amp; Pipeline">Process &amp; Pipeline</span></span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+            </a>
+            <a href="#pricing" class="drawer-big-link tactile-press">
+              <div class="link-left">
+                <span class="link-num">04</span>
+                <span class="nav__title"><span data-text="Pricing &amp; Multi-Currency">Pricing &amp; Multi-Currency</span></span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+            </a>
+            <a href="#faq" class="drawer-big-link tactile-press">
+              <div class="link-left">
+                <span class="link-num">05</span>
+                <span class="nav__title"><span data-text="Questions &amp; FAQ">Questions &amp; FAQ</span></span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+            </a>
+          </div>
+
+          <div class="drawer-footer-row">
+            <div class="drawer-meta-col">
+              <div class="drawer-status-badge">
+                <span class="status-indicator"></span>
+                <span>OPEN FOR CLIENT PROJECTS</span>
+              </div>
+              <div class="drawer-contact-direct">
+                <span>WhatsApp: <b>+880 1852-093429</b></span>
+              </div>
+            </div>
+
+            <div class="drawer-socials-col">
+              <a href="https://github.com/automation1900-ui" target="_blank" rel="noopener noreferrer" class="social-chip tactile-press">GitHub</a>
+              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="social-chip tactile-press">WhatsApp</a>
+              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="drawer-cta-btn tactile-press">
+                <span>Start a Project &rarr;</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
-
-  <!-- Mobile Dropdown Menu -->
-  <div class="mobile-nav-drawer" id="mobileNavDrawer">
-    <a href="#services" class="tactile-press">Services</a>
-    <a href="#lab" class="tactile-press">3D WebGL Lab</a>
-    <a href="#process" class="tactile-press">Process</a>
-    <a href="#pricing" class="tactile-press">Pricing</a>
-    <a href="#faq" class="tactile-press">Questions &amp; Answers</a>
-    <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" style="color:var(--accent-electric);font-weight:600;">Message on WhatsApp &rarr;</a>
-  </div>
 
   <main>
     <!-- ==========================================================================
@@ -2947,32 +3471,66 @@
         });
       }
 
-      /* --- 6. Sticky Header --- */
-      const header = document.getElementById('siteHeader');
+      /* --- 6. Cuberto Dynamic Island Navbar & Morphing Menu --- */
+      const navbar = document.getElementById('siteHeader');
+      const islandStrip = document.getElementById('islandStrip');
+      const menuToggleBtn = document.getElementById('menuToggleBtn');
+      const islandDrawer = document.getElementById('islandMenuDrawer');
+
+      // Scroll morph: Shrinks navbar into sleek Dynamic Island pill
       window.addEventListener('scroll', function() {
-        if (window.scrollY > 40) {
-          header.classList.add('scrolled');
+        if (window.scrollY > 30) {
+          navbar.classList.add('-scrolled');
         } else {
-          header.classList.remove('scrolled');
+          navbar.classList.remove('-scrolled');
         }
       }, { passive: true });
 
-      /* --- 7. Mobile Drawer --- */
-      const menuBtn = document.getElementById('menuToggleBtn');
-      const drawer = document.getElementById('mobileNavDrawer');
-      if (menuBtn && drawer) {
-        menuBtn.addEventListener('click', function(e) {
+      // Toggle Dynamic Island Menu Expansion
+      if (menuToggleBtn && navbar) {
+        menuToggleBtn.addEventListener('click', function(e) {
           e.stopPropagation();
-          drawer.classList.toggle('open');
+          const isOpen = navbar.classList.toggle('-open');
+          menuToggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
-        drawer.querySelectorAll('a').forEach(function(link) {
-          link.addEventListener('click', function() {
-            drawer.classList.remove('open');
+
+        // Close when clicking any menu link inside the drawer
+        if (islandDrawer) {
+          islandDrawer.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+              navbar.classList.remove('-open');
+              menuToggleBtn.setAttribute('aria-expanded', 'false');
+            });
           });
-        });
+        }
+
+        // Close when clicking outside the dynamic island strip
         document.addEventListener('click', function(e) {
-          if (!drawer.contains(e.target) && !menuBtn.contains(e.target)) {
-            drawer.classList.remove('open');
+          if (islandStrip && !islandStrip.contains(e.target)) {
+            navbar.classList.remove('-open');
+            menuToggleBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && navbar.classList.contains('-open')) {
+            navbar.classList.remove('-open');
+            menuToggleBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+
+      // Services dropdown touch support
+      const servicesToggleBtn = document.getElementById('servicesToggleBtn');
+      if (servicesToggleBtn) {
+        servicesToggleBtn.addEventListener('click', function(e) {
+          // If on touch device and not clicking sub-links, toggle dropdown
+          if (window.innerWidth < 900) {
+            const parentItem = servicesToggleBtn.closest('.cuberto-nav-item');
+            if (parentItem) {
+              parentItem.classList.toggle('-active');
+            }
           }
         });
       }
