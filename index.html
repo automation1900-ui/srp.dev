@@ -357,7 +357,7 @@
       border-radius: 9999px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.2);
       transition: max-width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-radius 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                   background 0.4s var(--ease),
                   border-color 0.4s var(--ease),
                   box-shadow 0.4s var(--ease);
@@ -379,12 +379,13 @@
 
     .cuberto-navbar.-open .island-strip {
       max-width: 1020px !important;
-      border-radius: 28px !important;
+      border-radius: 32px !important;
       background: rgba(6, 6, 11, 0.98) !important;
       backdrop-filter: blur(36px) saturate(200%) !important;
       -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
       border-color: rgba(78, 163, 224, 0.4) !important;
       box-shadow: 0 30px 90px rgba(0, 0, 0, 0.96), 0 0 50px rgba(78, 163, 224, 0.22) !important;
+      overflow: hidden !important;
     }
 
     .island-bar {
@@ -408,17 +409,19 @@
       .island-strip {
         width: calc(100% - 24px);
         border-radius: 9999px;
+        overflow: hidden !important; /* MAINTAINS BUTTER-SMOOTH ROUNDED CORNERS WHILE EXPANDING */
       }
       .cuberto-navbar.-scrolled .island-strip {
         width: calc(100% - 32px);
       }
       .cuberto-navbar.-open .island-strip {
         width: calc(100% - 20px) !important;
-        border-radius: 24px !important;
+        border-radius: 32px !important;
+        overflow: hidden !important;
       }
       .island-bar {
         height: 58px;
-        padding: 0 16px;
+        padding: 0 18px;
       }
     }
 
@@ -778,14 +781,14 @@
       animation: 0.75s cb-btn_menu-open-top forwards;
       top: calc(50% - 1px);
       transform: rotate(45deg);
-      background: var(--accent-electric);
+      background: #ffffff;
     }
 
     .cuberto-navbar.-open .toggle-line.bot-line {
       animation: 0.75s cb-btn_menu-open-bottom forwards;
       top: calc(50% - 1px);
       transform: rotate(-45deg);
-      background: var(--accent-purple);
+      background: #ffffff;
     }
 
     @keyframes cb-btn_menu-open-top {
@@ -802,7 +805,7 @@
       100% { clip-path: inset(0%); top: calc(50% - 1px); transform: rotate(-45deg); }
     }
 
-    /* Dynamic Island Accordion Drawer & Big Links */
+    /* Dynamic Island Accordion Drawer (Smooth Rounded Expansion) */
     .island-menu-drawer {
       display: grid;
       grid-template-rows: 0fr;
@@ -817,159 +820,100 @@
       min-height: 0;
       overflow: hidden;
       opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity 0.4s var(--ease), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 0 24px;
+      transform: translateY(-12px);
+      transition: opacity 0.35s ease 0.08s, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+      padding: 0 28px;
     }
 
     .cuberto-navbar.-open .drawer-inner {
       opacity: 1;
       transform: translateY(0);
-      padding: 10px 24px 28px 24px;
-      transition-delay: 0.08s;
+      padding: 2px 28px 34px 28px;
     }
 
-    .drawer-header-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: rgba(255, 255, 255, 0.6);
-      margin: 10px 0 16px 0;
-    }
-
-    .drawer-links-grid {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .drawer-big-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-      font-size: clamp(20px, 4.8vw, 32px);
-      font-weight: 700;
-      font-family: var(--font-heading);
-      letter-spacing: -0.02em;
-      color: rgba(255, 255, 255, 0.9);
-      transition: all 0.3s;
-    }
-
-    .drawer-big-link:last-child {
-      border-bottom: none;
-    }
-
-    .drawer-big-link .link-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .drawer-big-link .link-num {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--accent-electric);
-      opacity: 0.65;
-      letter-spacing: 0.05em;
-      transition: opacity 0.3s, transform 0.3s;
-    }
-
-    .drawer-big-link svg {
-      color: rgba(255, 255, 255, 0.3);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
-    }
-
-    .drawer-big-link:hover {
-      color: #ffffff;
-      padding-left: 8px;
-    }
-
-    .drawer-big-link:hover .link-num {
-      opacity: 1;
-      transform: scale(1.1);
-    }
-
-    .drawer-big-link:hover svg {
-      transform: translate(4px, -4px);
-      color: var(--accent-electric);
-    }
-
-    .drawer-footer-row {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    @media (min-width: 640px) {
-      .drawer-footer-row {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+    @media (max-width: 640px) {
+      .drawer-inner {
+        padding: 0 20px;
+      }
+      .cuberto-navbar.-open .drawer-inner {
+        padding: 2px 20px 28px 20px;
       }
     }
 
-    .drawer-status-badge {
+    /* Minimalist "Menu" Header matching Cuberto Screenshot */
+    .cuberto-menu-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.52);
+      font-family: var(--font-body);
+      padding: 6px 0 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      margin-bottom: 22px;
+      letter-spacing: -0.01em;
+    }
+
+    /* Main Navigation Links (Clean, Large, Exact Match to Screenshot) */
+    .cuberto-menu-stack {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.65);
-      letter-spacing: 0.1em;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 26px;
     }
 
-    .status-indicator {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 10px #10b981;
-      animation: livePulse 2s infinite;
-    }
-
-    @keyframes livePulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.85); }
-    }
-
-    .drawer-contact-direct {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.7);
-      margin-top: 4px;
-    }
-
-    .drawer-contact-direct b {
-      color: var(--accent-electric);
-      font-weight: 600;
-    }
-
-    .drawer-socials-col {
-      display: flex;
+    .cuberto-stack-link {
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
+      font-size: clamp(34px, 8.5vw, 44px);
+      font-weight: 600;
+      font-family: var(--font-heading);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: rgba(255, 255, 255, 0.95);
+      width: fit-content;
+      transition: color 0.3s;
     }
 
-    .social-chip {
-      padding: 6px 14px;
+    .cuberto-stack-link .stack-chevron {
+      width: 18px;
+      height: 18px;
+      color: rgba(255, 255, 255, 0.45);
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .cuberto-stack-link:hover .stack-chevron {
+      color: var(--accent-electric);
+      transform: translateY(2px);
+    }
+
+    /* Solid Rounded Pill Button matching Screenshot */
+    .cuberto-stack-action {
+      display: flex;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .cuberto-contacts-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #000000;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 13px 32px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      font-size: 12px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+      transition: all 0.25s;
+    }
+
+    .cuberto-contacts-pill:hover {
+      background: var(--accent-electric);
+      color: #000000;
+      box-shadow: 0 0 25px rgba(78, 163, 224, 0.6);
+      transform: scale(1.03);
+    }
       transition: all 0.25s;
     }
 
@@ -2503,70 +2447,50 @@
         </div>
       </div>
 
-      <!-- Morphing Dynamic Island Menu Accordion -->
+      <!-- Morphing Dynamic Island Menu Accordion (Exact Match to Screenshot) -->
       <div class="island-menu-drawer" id="islandMenuDrawer">
         <div class="drawer-inner">
-          <div class="drawer-header-tag">
-            <span class="hero-pulse-dot"></span>
-            <span>// NAVIGATION DIRECTORY</span>
+          <!-- Clean "Menu" Header matching Cuberto Screenshot -->
+          <div class="cuberto-menu-label">
+            <span>Menu</span>
           </div>
 
-          <div class="drawer-links-grid">
-            <a href="#services" class="drawer-big-link tactile-press">
-              <div class="link-left">
-                <span class="link-num">01</span>
-                <span class="nav__title"><span data-text="Services">Services</span></span>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+          <!-- Main Navigation Links (Clean, Large, Exact Match to Screenshot) -->
+          <div class="cuberto-menu-stack">
+            <!-- 1. Services with subtle chevron -->
+            <a href="#services" class="cuberto-stack-link tactile-press">
+              <span class="nav__title"><span data-text="Services">Services</span></span>
+              <svg class="stack-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6l4 4 4-4"/>
+              </svg>
             </a>
-            <a href="#lab" class="drawer-big-link tactile-press">
-              <div class="link-left">
-                <span class="link-num">02</span>
-                <span class="nav__title"><span data-text="3D WebGL Lab">3D WebGL Lab</span></span>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+
+            <!-- 2. 3D Lab -->
+            <a href="#lab" class="cuberto-stack-link tactile-press">
+              <span class="nav__title"><span data-text="3D Lab">3D Lab</span></span>
             </a>
-            <a href="#process" class="drawer-big-link tactile-press">
-              <div class="link-left">
-                <span class="link-num">03</span>
-                <span class="nav__title"><span data-text="Process &amp; Pipeline">Process &amp; Pipeline</span></span>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+
+            <!-- 3. Process -->
+            <a href="#process" class="cuberto-stack-link tactile-press">
+              <span class="nav__title"><span data-text="Process">Process</span></span>
             </a>
-            <a href="#pricing" class="drawer-big-link tactile-press">
-              <div class="link-left">
-                <span class="link-num">04</span>
-                <span class="nav__title"><span data-text="Pricing &amp; Multi-Currency">Pricing &amp; Multi-Currency</span></span>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+
+            <!-- 4. Pricing -->
+            <a href="#pricing" class="cuberto-stack-link tactile-press">
+              <span class="nav__title"><span data-text="Pricing">Pricing</span></span>
             </a>
-            <a href="#faq" class="drawer-big-link tactile-press">
-              <div class="link-left">
-                <span class="link-num">05</span>
-                <span class="nav__title"><span data-text="Questions &amp; FAQ">Questions &amp; FAQ</span></span>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+
+            <!-- 5. FAQ -->
+            <a href="#faq" class="cuberto-stack-link tactile-press">
+              <span class="nav__title"><span data-text="FAQ">FAQ</span></span>
             </a>
           </div>
 
-          <div class="drawer-footer-row">
-            <div class="drawer-meta-col">
-              <div class="drawer-status-badge">
-                <span class="status-indicator"></span>
-                <span>OPEN FOR CLIENT PROJECTS</span>
-              </div>
-              <div class="drawer-contact-direct">
-                <span>WhatsApp: <b>+880 1852-093429</b></span>
-              </div>
-            </div>
-
-            <div class="drawer-socials-col">
-              <a href="https://github.com/automation1900-ui" target="_blank" rel="noopener noreferrer" class="social-chip tactile-press">GitHub</a>
-              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="social-chip tactile-press">WhatsApp</a>
-              <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="drawer-cta-btn tactile-press">
-                <span>Start a Project &rarr;</span>
-              </a>
-            </div>
+          <!-- Solid Rounded Pill Button matching Cuberto Screenshot -->
+          <div class="cuberto-stack-action">
+            <a href="https://wa.me/8801852093429" target="_blank" rel="noopener noreferrer" class="cuberto-contacts-pill tactile-press">
+              <span class="nav__title"><span data-text="Contacts">Contacts</span></span>
+            </a>
           </div>
         </div>
       </div>
