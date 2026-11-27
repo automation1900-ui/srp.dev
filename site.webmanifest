@@ -1,7 +1,7 @@
 {
-  "name": "SRP.dev | Srpdev & SrpShourov",
-  "short_name": "SRP.dev",
-  "description": "SRP.dev (Srpdev / SrpShourov) — Creative Full-Stack Web Development, 3D WebGL & Custom Digital Solutions.",
+  "name": "SRP Developer",
+  "short_name": "SRP Developer",
+  "description": "SRP Developer (SrpShourov / SRP.dev) — Creative Full-Stack Web Development, 3D WebGL & Custom Digital Solutions.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
