@@ -1,20 +1,30 @@
 {
   "name": "SRP.dev | Srpdev & SrpShourov",
   "short_name": "SRP.dev",
-  "description": "SRP.dev (Srpdev / SrpShourov) — Web Development, Website Builder & Digital Solutions.",
+  "description": "SRP.dev (Srpdev / SrpShourov) — Creative Full-Stack Web Development, 3D WebGL & Custom Digital Solutions.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "/Srplogo.png",
+      "src": "/favicon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
       "src": "/Srplogo.png",
-      "sizes": "512x512",
+      "sizes": "1254x1254",
       "type": "image/png"
     }
   ]
